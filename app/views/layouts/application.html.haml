@@ -1,0 +1,16 @@
+%html
+  %head
+    %title Reservoir
+    = stylesheet_link_tag    "application", :media => "all"
+    = javascript_include_tag "application"
+    = csrf_meta_tags
+    
+  %body
+    #topbanner
+      -if user_signed_in?
+        (#{current_user.login}) | 
+        = link_to "Log out", destroy_user_session_path, method: :delete
+      -else  
+        = link_to "Register |", new_user_registration_path
+        = link_to "Log in", new_user_session_path
+    = yield

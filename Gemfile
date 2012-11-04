@@ -4,6 +4,7 @@ gem 'rails', '3.2.8'
 gem 'jquery-rails'
 gem 'haml'
 gem 'haml-rails'
+gem 'devise'
 
 group :development do
   gem 'sqlite3'
