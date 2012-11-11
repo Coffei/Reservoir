@@ -1,4 +1,6 @@
 Reservoir::Application.routes.draw do
+  
+  resources :rooms
  
   devise_for :users do
     get '/login', :to => 'devise/sessions#new'
