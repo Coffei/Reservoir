@@ -1,0 +1,26 @@
+!!!
+%html
+  %head
+    %title Reservoir
+    = stylesheet_link_tag    "application", :media => "all"
+    = javascript_include_tag "application"
+    = csrf_meta_tags
+    
+  %body
+    #topbanner
+      -if user_signed_in?
+        (#{current_user.login}) | 
+        = link_to "Log out", destroy_user_session_path, method: :delete
+      -else 
+        -unless controller_name == "registrations" 
+          = link_to "Register", register_path
+        -if controller_name != "registrations" && controller_name != "sessions"
+          |
+        -unless controller_name == "sessions"
+          = link_to "Log in", login_path
+          
+    -if flash[:notice]
+      #notice
+        = flash[:notice]
+        
+    = yield

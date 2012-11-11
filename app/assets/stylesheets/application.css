@@ -11,3 +11,100 @@
  *= require_self
  *= require_tree .
  */
+
+h1, h2, h3{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	
+}
+
+p {
+	font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+a {
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+a:hover {
+	text-decoration: underline;    
+}
+
+#topbanner a {
+	color: #777777;
+}
+
+#topbanner {
+	position: absolute;
+	top: 10px;
+	right:10px;
+	border: 1px solid #999999;
+	background-color: #FAFAFA;
+	text-align: right;
+	padding: 3px 6px;
+	border-radius: 3px;
+	font-size: smaller;
+}
+
+#notice {
+    position:absolute;
+    top: 10px;
+    right: 200px;
+    border: 1px solid #003c90;
+	background-color: #c9d6ff;
+	border-radius: 5px;
+	padding: 5px 10px;
+	font-size: smaller;
+  }
+
+.alert {
+	margin: 0px auto 20px auto;
+	border: 2px solid #740000;
+	background-color: #f7b5b5;
+	border-radius: 5px;
+	width: 300px;
+	padding: 5px 10px;
+}
+
+.logform {
+	
+	
+}
+
+
+.logcontent {
+	margin-top: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 500px;
+	text-align: center;
+	border: 3px solid #1fcd00;
+	background-color: #e3fadd;
+	border-radius: 10px;
+	padding: 5px 0px 15px 0px;
+}
+
+.logcontent table {
+	margin: auto;
+}
+
+.logcontent a {
+   color: #005000 ;
+}
+
+.submit input {
+	margin-top: 15px;
+	margin-bottom: 10px;
+	font-size: medium;
+}
+
+.registerfields {
+	text-align: left;
+	border-collapse: collapse;
+}
+
+.registerfields input {
+	margin-bottom: 10px;
+}
+
+
