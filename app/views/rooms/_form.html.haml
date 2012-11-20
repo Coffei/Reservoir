@@ -1,0 +1,35 @@
+= bootstrap_flash
+-if @room.errors.any?
+  .alert.alert-error.fade.in
+    Some #{@room.errors.size==1? "error" : "errors"} occured, fix them and try again.
+  
+= form_for(@room, html: {class: "form-horizontal"}) do |f|
+  .control-group
+    = f.label :name, class: "control-label"
+    .controls
+      = f.text_field :name
+      -unless @room.errors[:name].empty?
+        %p.text-error-inline= @room.errors[:name].join(", ")
+  .control-group
+    = f.label :capacity, class: "control-label"
+    .controls
+      = f.text_field :capacity
+      -unless @room.errors[:capacity].empty?
+        %p.text-error-inline= @room.errors[:capacity].join(", ")
+  .control-group
+    = f.label :location, class:"control-label"
+    .controls
+      = f.text_field :location
+      -unless @room.errors[:location].empty?
+        %p.text-error-inline= @room.errors[:location].join(", ")
+  .control-group
+    = f.label :equipment, class: "control-label"
+    .controls
+      = f.text_field :equipment
+      -unless @room.errors[:equipment].empty?
+        %p.text-error-inline= @room.errors[:equipment].join(", ")
+          
+  
+  .form-actions
+    = f.submit "Submit", class: "btn btn-primary"
+    = link_to "Back", :back, class: "btn"

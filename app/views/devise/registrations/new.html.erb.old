@@ -1,0 +1,48 @@
+<div class="logcontent">
+	<h2>Register</h2>
+
+	
+
+	<% if flash[:alert]%>
+	<div class="alert">
+		<%= flash[:alert] %>
+	</div>
+
+	<% end %>
+
+	<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => {class: "form-horizontal"}) do |f| %>
+	<%= devise_error_messages! %>
+
+	<div class="">
+
+	<table class="registerfields">
+		<tr>
+			<td><%= f.label :login, class: 'control-label' %> (required)</td>
+			<td><%= f.text_field :login, :size => 25 %></td>
+		</tr>
+		<tr>
+			<td><%= f.label :name %></td>
+			<td><%= f.text_field :name, :size => 25 %></td>
+		</tr>
+		<tr>
+			<td><%= f.label :email %></td>
+			<td><%= f.email_field :email, :size => 25 %></td>
+		</tr>
+		<tr>
+			<td><%= f.label :password %></td>
+			<td><%= f.password_field :password, :size => 25 %></td>
+		</tr>
+		<tr>
+			<td><%= f.label :password_confirmation %></td>
+			<td><%= f.password_field :password_confirmation, :size => 25 %></td>
+		</tr>
+
+	</table>
+
+	<div class="submit">
+		<%= f.submit "Register" %>
+	</div>
+	<% end %>
+
+	<%= render "devise/shared/links" %>
+</div>

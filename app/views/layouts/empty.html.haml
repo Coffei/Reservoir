@@ -1,0 +1,66 @@
+!!! 5
+%html(lang="en")
+  %head
+    %meta(charset="utf-8")
+    %meta(http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1")
+    %meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    %title= content_for?(:title) ? yield(:title) : "Reservoir"
+    = csrf_meta_tags
+    / Le HTML5 shim, for IE6-8 support of HTML elements
+    /[if lt IE 9]
+      = javascript_include_tag "http://html5shim.googlecode.com/svn/trunk/html5.js"
+    = stylesheet_link_tag "application", :media => "all"
+    %link(href="images/apple-touch-icon-144x144.png" rel="apple-touch-icon-precomposed" sizes="144x144")
+    %link(href="images/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114")
+    %link(href="images/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72")
+    %link(href="images/apple-touch-icon.png" rel="apple-touch-icon-precomposed")
+    %link(href="images/favicon.ico" rel="shortcut icon")
+    
+    %style
+      body {
+      background-color: #F5F5F5;
+      padding-bottom: 40px;
+      padding-top: 40px;
+      }
+      \.form-signin {
+      background-color: #FFFFFF;
+      border: 1px solid #E5E5E5;
+      border-radius: 5px 5px 5px 5px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      margin: 0 auto 20px;
+      max-width: #{(@width? @width : "300")}px;
+      padding: 19px 29px 29px;
+      text-align: center;
+      }
+      \.form-signin .form-signin-heading, .form-signin .checkbox {
+      margin-bottom: 10px;
+      }
+      \.form-signin input[type="text"], .form-signin input[type="password"], .form-signin input[type="email"] {
+      font-size: 16px;
+      height: 20px;
+      margin-bottom: 15px;
+      padding: 7px 9px;
+      }
+      \.form-horizontal .control-label {
+      width: 110px;
+      }
+      \.form-horizontal .controls {
+      margin-left: 120px;
+      }
+      \.form-horizontal .form-actions {
+      padding-left: 0px;
+      }
+      
+
+  %body
+    %div{style: "position:absolute; top: 10px; right: 10px;" }
+      %a{href: root_path}
+        %i.icon-home.icon-large
+    .container
+      = yield
+    
+    /
+      Javascripts
+      \==================================================
+    / Placed at the end of the document so the pages load faster
+    = javascript_include_tag "application"

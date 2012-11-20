@@ -6,4 +6,9 @@ module ApplicationHelper
     
     text
   end
+  
+  def active_class(path)
+    linkpath = path.split('#')[0]
+    "active" if request.fullpath.start_with?(linkpath) && request.fullpath != root_path && !linkpath.empty?
+  end
 end

@@ -11,6 +11,7 @@ gem 'twitter-bootstrap-rails'
 
 group :development do
   gem 'sqlite3'
+  gem 'pry'
 end
 
 group :test do
