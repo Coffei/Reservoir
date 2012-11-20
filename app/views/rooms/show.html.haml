@@ -1,0 +1,19 @@
+.hero-unit
+  %h1= @room.name
+  %table.table.room-attributes
+    %tbody
+      %tr
+        %td Capacity:
+        %td
+          %span.badge.badge-info= @room.capacity
+      %tr
+        %td Location:
+        %td= mute(@room.location)
+      %tr
+        %td Equipment:
+        %td= mute(@room.equipment)
+  -if user_signed_in?
+    =link_to content_tag(:span, '', class: "icon-cog") + " Edit", edit_room_path(@room), class: "btn"
+    =link_to content_tag(:span, '', class: "icon-remove") + " Delete", @room, method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure?"}
+        
+      

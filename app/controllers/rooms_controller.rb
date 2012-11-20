@@ -25,7 +25,7 @@ class RoomsController < ApplicationController
     @room = Room.new(params[:room])
     if @room.save
       flash[:info] = "Room #{@room.name} was created."
-      redirect_to rooms_path
+      redirect_to @room
     else
       render action: "new"
     end
@@ -41,9 +41,13 @@ class RoomsController < ApplicationController
     
     if(@room.update_attributes(params[:room]))
       flash[:info] = "Room #{@room.name} was updated."
-      redirect_to rooms_path
+      redirect_to @room
     else
       render action: "edit"
     end
+  end
+  
+  def show
+    @room = Room.find(params[:id])
   end
 end

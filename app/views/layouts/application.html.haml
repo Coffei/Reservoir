@@ -19,6 +19,7 @@
 
   
   %body{@spy? {"data-spy" => "scroll", "data-target" => "#sidebar" } : {}}
+  
     .navbar.navbar-fixed-top
       .navbar-inner
         .container
@@ -38,8 +39,7 @@
                   %li.divider
                   %li{class: active_class(new_room_path)}= link_to content_tag(:i, "", class: "icon-plus") + "Add new room", new_room_path
                 
-              %li{class: active_class("#bbb")}= link_to "Link 2", "#bbb"
-              %li{class: active_class("#ccc")}= link_to "Link 3", "#ccc"
+             
             
             -if user_signed_in?
               .pull-right.btn-group
@@ -66,7 +66,7 @@
                 
                 
                 
-            
+      
     .container
 
       .row
@@ -88,8 +88,10 @@
            
            
     
-      %footer
+    %footer
+      .container
         %p &copy; Company 2012
+        
     /
       Javascripts
       \==================================================

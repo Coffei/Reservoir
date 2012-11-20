@@ -15,13 +15,14 @@
         %tr
           %td= room.id
           %td= link_to room.name, room_path(room)
-          %td= room.capacity
+          %td
+            %span.badge.badge-info= room.capacity
           %td= room.location
           %td= room.equipment
           %td
             -if user_signed_in?
-              = link_to "Edit", edit_room_path(room), class: "btn btn-mini"
-              = link_to "Delete", room_path(room), method: :delete, class: "btn btn-danger btn-mini", data: {confirm: "Are you sure?"}
+              = link_to content_tag(:span,'', class: "icon-cog") + " Edit", edit_room_path(room), class: "btn btn-small"
+              = link_to content_tag(:span,'', class: "icon-remove") + " Delete", room_path(room), method: :delete, class: "btn btn-danger btn-small", data: {confirm: "Are you sure?"}
 -else
   %p.lead No rooms, add some first
   
