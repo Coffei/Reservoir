@@ -11,7 +11,19 @@ class User < ActiveRecord::Base
   
   validates :login, uniqueness: true, presence: true, length: { maximum: 50 }
   validates :name, length: { maximum: 100 }
-  validates :email, format: { :with => /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i }
+  validates :email, format: { :with => /(\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z)?/i }
+  
+  validate :password_equality
+  
+  def password_equality
+    if @password.nil? || @password.empty? 
+      errors.add(:password, "cannot be empty")
+    elsif(@password != @password_confirmation)
+      errors.add(:password, "passwords must be the same.")
+      errors.add(:password_confirmation, "")
+    end
+    
+  end
   
   def email_required?
     false

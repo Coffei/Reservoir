@@ -5,6 +5,9 @@ gem 'jquery-rails'
 gem 'haml'
 gem 'haml-rails'
 gem 'devise'
+gem 'therubyracer'
+gem 'less-rails'
+gem 'twitter-bootstrap-rails'
 
 group :development do
   gem 'sqlite3'

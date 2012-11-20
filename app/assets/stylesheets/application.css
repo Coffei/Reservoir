@@ -11,7 +11,7 @@
  *= require_self
  *= require_tree .
  */
-
+/*
 h1, h2, h3{
 	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 	
@@ -105,6 +105,5 @@ a:hover {
 
 .registerfields input {
 	margin-bottom: 10px;
-}
-
+}*/
 

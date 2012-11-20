@@ -1,0 +1,23 @@
+
+= form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: 'form-signin'}) do |f|
+  = bootstrap_flash
+  -if resource.errors.any?
+    -resource.errors.each_pair do |where, msg|
+      .alert.alert-error.fade.in
+        Error in #{readable(where)}: #{msg}
+      
+     
+  
+  %h2.form-signin-heading Log in
+  = f.text_field :login, placeholder: "Login or nick", style: 'input-block-level'
+  = f.password_field :password, placeholder: "Password", style: 'input-block-level'
+  %div{style: "margin-left: auto; margin-right: auto; width: 150px; text-align: left;"}
+    %label.checkbox
+      = f.check_box :remember_me, style: "margin-right: 10px;"
+      Remember me
+  .form-actions
+    = f.submit "Log in", class: 'btn btn-large btn-primary'
+    
+    
+    %br
+    = render 'devise/shared/links'
