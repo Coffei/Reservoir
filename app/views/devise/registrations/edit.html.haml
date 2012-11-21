@@ -1,0 +1,31 @@
+-@width = "350"
+
+= form_for(resource, as: resource_name, url: registration_path(resource_name), html: {method: :put, class: "form-signin form-horizontal"}) do |f|
+  = bootstrap_flash
+  -if resource.errors.any?
+    -resource.errors.each do |where, msg|
+      -next if msg.empty?
+      .alert.alert-error.fade.in
+        Error in #{readable(where)}: #{msg}
+  .page-header 
+    %h2 User #{resource.login}
+  
+  .control-group
+    = f.label :login, class: "control-label"
+    .controls
+      = f.text_field :login, placeholder: "login"
+  .control-group 
+    = f.label :name, class: "control-label"
+    .controls
+      = f.text_field :name, placeholder: "name"
+  .control-group
+    = f.label :email, class: "control-label"
+    .controls
+      = f.email_field :email, placeholder: "email"
+      
+  .form-actions
+    = f.submit "Update", class: "btn btn-primary"
+    = link_to "Back", :back, class: "btn"
+    
+    %br
+    = link_to "Change my password", edit_user_password_path

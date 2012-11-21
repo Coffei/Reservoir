@@ -1,4 +1,7 @@
-.hero-unit
+-@sidelinks = {header: "Room detail", "Basic information" => "#basic", "Reservations" => "#reservations"}
+-@spy = true
+
+.hero-unit#basic
   %h1= @room.name
   %table.table.room-attributes
     %tbody
@@ -16,4 +19,7 @@
     =link_to content_tag(:span, '', class: "icon-cog") + " Edit", edit_room_path(@room), class: "btn"
     =link_to content_tag(:span, '', class: "icon-remove") + " Delete", @room, method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure?"}
         
-      
+#reservations
+  %h2 Reservations
+  
+    

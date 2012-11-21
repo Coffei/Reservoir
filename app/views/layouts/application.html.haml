@@ -43,7 +43,7 @@
             
             -if user_signed_in?
               .pull-right.btn-group
-                %button.btn.btn-primary
+                %a.btn.btn-primary{ href: edit_user_registration_path}
                   %span.icon-user
                   %span.login= current_user.login
                 %button.btn.btn-primary.dropdown-toggle{"data-toggle" => "dropdown"}
@@ -51,6 +51,7 @@
                 %ul.dropdown-menu
                   %li= link_to content_tag(:span, "", class: "icon-list") + "Reservations", "/"
                   %li.divider
+                  %li= link_to content_tag(:span, '', class: "icon-key") + " Change password", edit_user_password_path
                   %li= link_to content_tag(:span, "", class: "icon-off") + "Log out", destroy_user_session_path, method: :delete
                     
              

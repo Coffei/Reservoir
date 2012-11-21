@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :login, :password, :password_confirmation, :remember_me, :email, :name
   # attr_accessible :title, :body
+  attr_accessor :skip_password_validation
+  
   
   validates :login, uniqueness: true, presence: true, length: { maximum: 50 }
   validates :name, length: { maximum: 100 }
@@ -16,13 +18,14 @@ class User < ActiveRecord::Base
   validate :password_equality
   
   def password_equality
-    if @password.nil? || @password.empty? 
-      errors.add(:password, "cannot be empty")
-    elsif(@password != @password_confirmation)
-      errors.add(:password, "passwords must be the same.")
-      errors.add(:password_confirmation, "")
+    unless @skip_password_validation
+      if @password.nil? || @password.empty? 
+        errors.add(:password, "cannot be empty")
+      elsif(@password != @password_confirmation)
+        errors.add(:password, "passwords must be the same.")
+        errors.add(:password_confirmation, "")
+      end
     end
-    
   end
   
   def email_required?

@@ -2,9 +2,10 @@ Reservoir::Application.routes.draw do
   
   resources :rooms
  
-  devise_for :users do
-    get '/login', :to => 'devise/sessions#new'
-    get '/register', :to => 'devise/registrations#new'
+  devise_for :users, controllers: { registrations: "registrations" } do
+    get '/login', :to => 'devise/sessions#new', :as => "login"
+    get '/register', :to => 'devise/registrations#new', :as => "register"
+    get '/users/edit/password', :to => 'registrations#edit_password', :as => "edit_user_password"
   end
 
   root :to => "home#index"
