@@ -21,8 +21,9 @@
           %td= room.equipment
           %td
             -if user_signed_in?
-              = link_to content_tag(:span,'', class: "icon-cog") + " Edit", edit_room_path(room), class: "btn btn-small"
-              = link_to content_tag(:span,'', class: "icon-remove") + " Delete", room_path(room), method: :delete, class: "btn btn-danger btn-small", data: {confirm: "Are you sure?"}
+              .btn-group
+                = link_to content_tag(:span,'', class: "icon-cog") + " Edit", edit_room_path(room), class: "btn btn-small"
+                = link_to content_tag(:span,'', class: "icon-remove") + " Delete", room_path(room), method: :delete, class: "btn btn-danger btn-small", data: {confirm: "Are you sure?"}
 -else
   %p.lead No rooms, add some first
   

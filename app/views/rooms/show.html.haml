@@ -1,4 +1,4 @@
--@sidelinks = {header: "Room detail", "Basic information" => "#basic", "Reservations" => "#reservations"}
+-@sidelinks = {header: "Room detail", "Basic information" => "#basic", "Reservations" => "#reservations", "Add reservation" => "#newreservation"}
 -@spy = true
 
 .hero-unit#basic
@@ -21,5 +21,33 @@
         
 #reservations
   %h2 Reservations
-  
+  -if @reservations.any?
+    %table.table.table-striped.table-hover
+      %thead
+        %tr
+          %th Summary
+          %th Author
+          %th Start
+          %th End
+          %th Description
+      %tbody
+        -@reservations.each do |res|
+          %tr{class: "#{'success' if res.is_running}"}
+            %td= res.summary
+            %td= res.author.login
+            %td= res.start.localtime.to_s :date_time_nosec
+            %td= res.end.localtime.to_s :date_time_nosec
+            %td= res.description
+            -if user_signed_in?
+              %td
+                .btn-group
+                  = link_to content_tag(:span,'', class: "icon-cog") + " Edit", edit_room_reservation_path(@room, res), class: "btn btn-small"
+                  = link_to content_tag(:span,'', class: "icon-remove") + " Delete", room_reservation_path(@room, res), method: :delete, class:"btn btn-danger btn-small", data: {confirm: "Are you sure?"}
+  -else
+    %p.muted No reservations present
     
+#newreservation
+  %h2 Add reservation
+  =render "reservations/form"
+    
+      

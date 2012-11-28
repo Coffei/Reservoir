@@ -1,0 +1,6 @@
+.page-header
+  %h1 
+    Edit reservation
+    %small= @room.name
+
+= render "form", url: room_reservation_path(@room, @reservation)

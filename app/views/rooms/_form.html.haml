@@ -1,7 +1,6 @@
-= bootstrap_flash
 -if @room.errors.any?
   .alert.alert-error.fade.in
-    Some #{@room.errors.size==1? "error" : "errors"} occured, fix them and try again.
+    Some #{@room.errors.size==1? "error" : "errors"} occured, fix #{@room.errors.size==1? "it" : "them"} and try again.
   
 = form_for(@room, html: {class: "form-horizontal"}) do |f|
   .control-group

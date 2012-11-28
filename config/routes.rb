@@ -1,6 +1,8 @@
 Reservoir::Application.routes.draw do
   
-  resources :rooms
+  resources :rooms do
+    resources :reservations
+  end
  
   devise_for :users, controllers: { registrations: "registrations" } do
     get '/login', :to => 'devise/sessions#new', :as => "login"

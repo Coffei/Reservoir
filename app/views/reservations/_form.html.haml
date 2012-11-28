@@ -1,0 +1,46 @@
+-if @reservation.errors.any?
+  .alert.alert-error.fade.in
+    Some #{@reservation.errors.size==1? "error" : "errors"} occured, fix #{@reservation.errors.size==1? "it" : "them"} and try again.
+    
+
+-if !(defined? url) then url = room_reservations_path(@room) end
+
+= form_for(@reservation, url: url, html: {class: "form-horizontal"}) do |f|
+  .control-group 
+    = f.label :summary, class: "control-label"
+    .controls
+      = f.text_field :summary, placeholder: "summary"
+      -unless @reservation.errors[:summary].empty?
+        %p.text-error-inline= @reservation.errors[:summary].join(", ")
+  
+  .control-group
+    = f.label :start_string, "Start", class: "control-label"
+    .controls
+      = f.text_field :start_string, placeholder: "start date and time"
+      -unless @reservation.errors[:start_string].empty?
+        %p.text-error-inline= @reservation.errors[:start_string].join(", ")
+  
+  .control-group
+    = f.label :end_string, "End", class: "control-label"
+    .controls
+      = f.text_field :end_string, placeholder: "end date and time"
+      -unless @reservation.errors[:end_string].empty?
+        %p.text-error-inline= @reservation.errors[:end_string].join(", ")
+      
+  .control-group
+    = f.label :description, class: "control-label"
+    .controls
+      = f.text_area :description, rows: "10"
+      -unless @reservation.errors[:description].empty?
+        %p.text-error-inline= @reservation.errors[:description].join(", ")
+  -if params[:action]=="edit"
+    .control-group
+      = f.label :assign_to_me, "Make me owner", class: "control-label"
+      .controls
+        = check_box_tag(:assign_to_me)
+  
+  
+  .form-actions
+    = f.submit params[:action]=="edit"? "Update" : "Create", class: "btn btn-primary"
+    = link_to "Back", :back, class: "btn"
+      

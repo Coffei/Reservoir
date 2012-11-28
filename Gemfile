@@ -12,6 +12,7 @@ gem 'twitter-bootstrap-rails'
 group :development do
   gem 'sqlite3'
   gem 'pry'
+  gem 'rake', '0.9.2.2'
 end
 
 group :test do
@@ -25,3 +26,4 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
 end
+

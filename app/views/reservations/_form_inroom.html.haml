@@ -1,0 +1,31 @@
+-if @room.errors.any?
+  .alert.alert-error.fade.in
+    Some #{@room.errors.size==1? "error" : "errors"} occured, fix them and try again.
+    
+
+= form_for([@room, @room.reservations.build], html: {class: "form-horizontal"}) do |f|
+  .control-group
+    = f.label :summary, class: "control-label"
+    .controls
+      = f.text_field :summary, placeholder: "summary"
+  
+  .control-group
+    = f.label :start, class: "control-label"
+    .controls
+      = f.text_field :start, placeholder: "start date and time"
+  
+  .control-group
+    = f.label :end, class: "control-label"
+    .controls
+      = f.text_field :end, placeholder: "end date and time"
+      
+  %input{type: "hidden", name:"datetimeformat", value: "%m/%d/%Y %H:%M" } 
+  
+  .control-group
+    = f.label :description, class: "control-label"
+    .controls
+      = f.text_area :description, rows: "10"
+  
+  .form-actions
+    = f.submit "Create", class: "btn btn-primary"
+      

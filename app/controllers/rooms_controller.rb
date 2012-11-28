@@ -3,7 +3,6 @@ class RoomsController < ApplicationController
   before_filter :authenticate_user!, except: [:index, :show]
   
   
-  
   def index
     @rooms = Room.all
   end
@@ -49,5 +48,7 @@ class RoomsController < ApplicationController
   
   def show
     @room = Room.find(params[:id])
+    @reservations = Reservation.of(@room).between(Time.now, 14.days.from_now).order("start ASC")
+    @reservation = Reservation.new
   end
 end
