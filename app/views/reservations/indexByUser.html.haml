@@ -1,0 +1,12 @@
+-content_for :script do
+  :javascript
+    var reservationsFeed = "#{user_reservations_path(@user)}";
+
+.page-header
+  %h1
+    Reservations
+    %small= @user.login
+
+#calendar
+
+= render( partial: "reservations/modal", locals: { show_room: true, hide_author: true })

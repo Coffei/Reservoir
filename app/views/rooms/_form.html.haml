@@ -6,7 +6,7 @@
   .control-group
     = f.label :name, class: "control-label"
     .controls
-      = f.text_field :name
+      = f.text_field :name, placeholder: "name"
       -unless @room.errors[:name].empty?
         %p.text-error-inline= @room.errors[:name].join(", ")
   .control-group
@@ -18,13 +18,13 @@
   .control-group
     = f.label :location, class:"control-label"
     .controls
-      = f.text_field :location
+      = f.text_field :location, placeholder: "location"
       -unless @room.errors[:location].empty?
         %p.text-error-inline= @room.errors[:location].join(", ")
   .control-group
     = f.label :equipment, class: "control-label"
     .controls
-      = f.text_field :equipment
+      = f.text_field :equipment, placeholder: "equipment"
       -unless @room.errors[:equipment].empty?
         %p.text-error-inline= @room.errors[:equipment].join(", ")
           

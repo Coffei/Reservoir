@@ -15,6 +15,11 @@
     %link(href="images/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72")
     %link(href="images/apple-touch-icon.png" rel="apple-touch-icon-precomposed")
     %link(href="images/favicon.ico" rel="shortcut icon")
+    
+    -if content_for?(:script)
+      = yield(:script)
+        
+      
 
 
   
@@ -36,8 +41,9 @@
                   %b.caret
                 %ul.dropdown-menu
                   %li= link_to content_tag(:i, "", class: "icon-list") + "All rooms", rooms_path
-                  %li.divider
-                  %li{class: active_class(new_room_path)}= link_to content_tag(:i, "", class: "icon-plus") + "Add new room", new_room_path
+                  -if user_signed_in?
+                    %li.divider
+                    %li{class: active_class(new_room_path)}= link_to content_tag(:i, "", class: "icon-plus") + "Add new room", new_room_path
                 
              
             
@@ -49,7 +55,7 @@
                 %button.btn.btn-primary.dropdown-toggle{"data-toggle" => "dropdown"}
                   %span.caret
                 %ul.dropdown-menu
-                  %li= link_to content_tag(:span, "", class: "icon-list") + "Reservations", "/"
+                  %li= link_to content_tag(:span, "", class: "icon-list") + "Reservations", user_reservations_path(current_user)
                   %li.divider
                   %li= link_to content_tag(:span, '', class: "icon-key") + " Change password", edit_user_password_path
                   %li= link_to content_tag(:span, "", class: "icon-off") + "Log out", destroy_user_session_path, method: :delete

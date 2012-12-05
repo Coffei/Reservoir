@@ -5,4 +5,11 @@ class Room < ActiveRecord::Base
   validates :capacity , numericality: true
   validates :name, presence: true, length: { maximum: 100 }
   
+  def as_json
+    {
+      :id => self.id,
+      :name => self.name
+    }
+  end
+  
 end

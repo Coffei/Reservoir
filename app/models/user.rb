@@ -31,4 +31,11 @@ class User < ActiveRecord::Base
   def email_required?
     false
   end
+  
+  def as_json
+    {
+      :id => self.id,
+      :login => self.login
+    }
+  end
 end

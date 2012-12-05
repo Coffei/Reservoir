@@ -1,0 +1,18 @@
+.form-signin
+  .page-header
+    %h2= @user.login
+
+  %table.table.table-noheader
+    %tbody
+      %tr
+        %td
+          %strong Name
+        %td= mute(@user.name)
+      %tr
+        %td
+          %strong Email
+        %td= mute(@user.email, "none", ) { link_to(@user.email, 'mailto: #{@user.email}') }
+      %tr
+        %td
+          %strong Last signed in
+        %td= mute(@user.last_sign_in_at, "never") { @user.last_sign_in_at.to_s(:date_time_nosec) }

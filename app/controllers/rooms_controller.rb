@@ -13,7 +13,7 @@ class RoomsController < ApplicationController
     room.destroy
     
     redirect_to rooms_path
-    flash[:info] = "Room #{room.name} was deleted."
+    flash[:info] = "Room #{room.name.html_safe} was deleted."
   end
   
   def new
@@ -23,7 +23,7 @@ class RoomsController < ApplicationController
   def create
     @room = Room.new(params[:room])
     if @room.save
-      flash[:info] = "Room #{@room.name} was created."
+      flash[:info] = "Room #{@room.name.html_safe} was created."
       redirect_to @room
     else
       render action: "new"
@@ -39,7 +39,7 @@ class RoomsController < ApplicationController
     @room = Room.find(params[:id])
     
     if(@room.update_attributes(params[:room]))
-      flash[:info] = "Room #{@room.name} was updated."
+      flash[:info] = "Room #{@room.name.html_safe} was updated."
       redirect_to @room
     else
       render action: "edit"
@@ -48,7 +48,7 @@ class RoomsController < ApplicationController
   
   def show
     @room = Room.find(params[:id])
-    @reservations = Reservation.of(@room).between(Time.now, 14.days.from_now).order("start ASC")
+    @next_reservation = Reservation.of(@room).between(Time.now, 14.days.from_now).order("start ASC").first
     @reservation = Reservation.new
   end
 end

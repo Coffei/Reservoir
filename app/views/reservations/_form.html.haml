@@ -19,6 +19,7 @@
       = f.text_field :start_string, placeholder: "start date and time"
       -unless @reservation.errors[:start_string].empty?
         %p.text-error-inline= @reservation.errors[:start_string].join(", ")
+        
   
   .control-group
     = f.label :end_string, "End", class: "control-label"

@@ -37,4 +37,8 @@ class RegistrationsController < Devise::RegistrationsController
   def edit_password
     render :edit_password
   end
+  
+  def show
+    @user = User.find(params[:id])
+  end
 end

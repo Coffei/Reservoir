@@ -5,7 +5,6 @@
   %table.table.table-striped.table-hover
     %thead
       %tr
-        %th ID
         %th Name 
         %th Capacity
         %th Location
@@ -13,7 +12,6 @@
     %tbody
       - @rooms.each do |room|
         %tr
-          %td= room.id
           %td= link_to room.name, room_path(room)
           %td
             %span.badge.badge-info= room.capacity

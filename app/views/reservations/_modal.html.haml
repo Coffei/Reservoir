@@ -1,0 +1,39 @@
+.modal.hide.fade#reservationModal{role: "dialog", "aria-labelledby" => "reservationLabel", "aria-hidden" => "true"}
+  .modal-header
+    %button.close{type: "button", "data-dismiss" => "modal", "aria-hidden" => "true"} &times;
+    %h3#reservationLabel event name
+  .modal-body
+    %table.table.table-bordered
+      %tbody
+        -unless defined?(hide_author) && hide_author
+          %tr
+            %td
+              %strong Author
+            %td#authorField
+        -if defined?(show_room) && show_room
+          %tr
+            %td
+              %strong Room
+            %td#roomField
+        %tr
+          %td
+            %strong Start
+          %td#startField
+        %tr
+          %td
+            %strong End
+          %td#endField
+    %h4 Description:
+    %blockquote
+      %p#descriptionField
+  .modal-footer
+    .btn-group
+      -if user_signed_in?
+        %a.btn#editLink
+          = glyph("cog")
+          Edit
+        %a.btn.btn-danger#deleteLink{"data-confirm" => "Are you sure?"}
+          = glyph "remove"
+          Delete
+      %button.btn.btn-primary{type: "button", "data-dismiss" => "modal", "aria-hidden" => "true"} Close
+          

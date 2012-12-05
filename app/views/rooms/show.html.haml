@@ -1,5 +1,8 @@
 -@sidelinks = {header: "Room detail", "Basic information" => "#basic", "Reservations" => "#reservations", "Add reservation" => "#newreservation"}
 -@spy = true
+-content_for :script do
+  :javascript
+    var reservationsFeed = "#{room_reservations_path(@room)}"
 
 .hero-unit#basic
   %h1= @room.name
@@ -8,46 +11,34 @@
       %tr
         %td Capacity:
         %td
-          %span.badge.badge-info= @room.capacity
+          %span.badge.badge-info.label-medium= @room.capacity
       %tr
         %td Location:
         %td= mute(@room.location)
       %tr
         %td Equipment:
         %td= mute(@room.equipment)
+      %tr
+        %td Status:
+        %td= status(@next_reservation)
   -if user_signed_in?
     =link_to content_tag(:span, '', class: "icon-cog") + " Edit", edit_room_path(@room), class: "btn"
     =link_to content_tag(:span, '', class: "icon-remove") + " Delete", @room, method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure?"}
         
 #reservations
   %h2 Reservations
-  -if @reservations.any?
-    %table.table.table-striped.table-hover
-      %thead
-        %tr
-          %th Summary
-          %th Author
-          %th Start
-          %th End
-          %th Description
-      %tbody
-        -@reservations.each do |res|
-          %tr{class: "#{'success' if res.is_running}"}
-            %td= res.summary
-            %td= res.author.login
-            %td= res.start.localtime.to_s :date_time_nosec
-            %td= res.end.localtime.to_s :date_time_nosec
-            %td= res.description
-            -if user_signed_in?
-              %td
-                .btn-group
-                  = link_to content_tag(:span,'', class: "icon-cog") + " Edit", edit_room_reservation_path(@room, res), class: "btn btn-small"
-                  = link_to content_tag(:span,'', class: "icon-remove") + " Delete", room_reservation_path(@room, res), method: :delete, class:"btn btn-danger btn-small", data: {confirm: "Are you sure?"}
-  -else
-    %p.muted No reservations present
+  #calendar
     
 #newreservation
-  %h2 Add reservation
-  =render "reservations/form"
+  -if user_signed_in?
+    %h2 Add reservation
+    =render "reservations/form"
+  -else
+    %a{href: login_path}
+      %h3.muted
+        Log in first in order to create reservations
     
+= render "reservations/modal"   
+    
+ 
       

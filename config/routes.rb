@@ -1,15 +1,18 @@
 Reservoir::Application.routes.draw do
   
   resources :rooms do
-    resources :reservations
+    resources :reservations 
+    post "/reservations/deletemany", :to => "reservations#destroymany"
   end
  
   devise_for :users, controllers: { registrations: "registrations" } do
     get '/login', :to => 'devise/sessions#new', :as => "login"
     get '/register', :to => 'devise/registrations#new', :as => "register"
     get '/users/edit/password', :to => 'registrations#edit_password', :as => "edit_user_password"
+    get '/users/show/:id', :to => "registrations#show", :as => "user"   
   end
 
+  get '/users/show/:id/reservations', :to => "reservations#indexByUser", :as => "user_reservations"
   root :to => "home#index"
 
   # The priority is based upon order of creation:
