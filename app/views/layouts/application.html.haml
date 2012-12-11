@@ -33,12 +33,13 @@
             %span.icon-bar
             %span.icon-bar
           %a.brand{href: "#", title: "go to the top", rel: "tooltip"} Reservoir
+          %a.brand{href: root_path}= glyph("home")
           .container.nav-collapse 
             %ul.nav
-              %li= link_to(glyph("home") + " Home", root_path)
               %li{class: active_class(rooms_path) }= link_to(glyph("list") + " Rooms", rooms_path)
               -if user_signed_in?
-                %li= link_to(glyph("plus") + " Add new room", new_room_path)              
+                %li= link_to(glyph("plus") + " Add new room", new_room_path)
+              %li= link_to(glyph("search") + " Find a reservation", reservations_find_path)              
                 
              
             

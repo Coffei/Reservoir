@@ -23,9 +23,9 @@ module ApplicationHelper
   end
   
   def mute(text, mutedcontent = 'none', &block)
-    if(!text.methods.include?(:empty?)) then text = text.to_s end
+    unless !text || text.methods.include?(:empty?) then text = text.to_s end
       
-    if text.empty?
+    if !text || text.empty?
       content_tag(:span, mutedcontent, class: "muted")
     else 
       if block_given?

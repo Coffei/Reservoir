@@ -1,0 +1,35 @@
+.page-header
+  %h2 Find a reservation
+  
+= form_for(@reservation, url: reservations_find_path, method: "post", html: { class: "form-horizontal" }) do |f|
+  .control-group
+    = f.label :summary, "Summary contains", class: "control-label"
+    .controls
+      = f.text_field :summary, placeholder: "summary fraction"
+      
+  .control-group
+    = f.label :room, class: "control-label"
+    .controls
+      = f.collection_select :room, @rooms, :id, :name
+      
+  .control-group
+    = f.label :start_string, "Starts after", class: "control-label"
+    .controls
+      = f.text_field :start_string
+      -unless @reservation.errors[:start_string].empty?
+        %p.text-error-inline= @reservation.errors[:start_string].join(", ")
+      
+  .control-group
+    = f.label :end_string, "Ends before", class: "control-label"
+    .controls
+      = f.text_field :end_string
+      -unless @reservation.errors[:end_string].empty?
+        %p.text-error-inline= @reservation.errors[:end_string].join(", ")
+      
+  .control-group
+    = f.label :description, "Description contains", class: "control-label"
+    .controls
+      = f.text_area :description, placeholder: "description fraction", rows: "3"
+
+  .form-actions
+    = f.submit "Search", class: "btn btn-primary"

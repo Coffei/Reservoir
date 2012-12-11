@@ -1,5 +1,5 @@
 class ReservationsController < ApplicationController
-  before_filter :authenticate_user!, except: [:index, :show, :indexByUser]
+  before_filter :authenticate_user!, except: [:index, :show, :indexByUser, :find, :search]
   DATETIME_FORMAT = Time::DATE_FORMATS[:date_time_nosec]
   
   def index
@@ -40,9 +40,7 @@ class ReservationsController < ApplicationController
       format.json { render :json => @reservation.as_public_json }
     end
   end
-  
- 
-  
+   
   def create
     @room = Room.find(params[:room_id])
     
@@ -131,5 +129,54 @@ class ReservationsController < ApplicationController
       flash[:notice] = "Reservation #{@reservation.summary.html_safe} was updated!"
       redirect_to @reservation.room
     end
+  end
+  
+  def find
+    @reservation = Reservation.new
+    @rooms = Room.all.insert(0, Room.new(name: "--no particular room--", id: nil))
+  end
+  
+  def search
+    room = params[:reservation].delete(:room)
+    @reservation = Reservation.new(params[:reservation])
+    search = @reservation
+    search.room_id = room
+    
+    if search.summary.empty? && search.start_string.empty? && search.end_string.empty? && search.description.empty?
+      flash[:error] = "Enter some search parameters first!"
+      
+      @rooms = Room.all.insert(0, Room.new(name: "--no particular room--", id: nil))
+      render action: "find"
+    else
+      begin
+        search.start = DateTime.strptime(params[:reservation][:start_string], DATETIME_FORMAT) - DateTime.local_offset - 1.minute unless search.start_string.empty?
+        search.end = DateTime.strptime(params[:reservation][:end_string], DATETIME_FORMAT) - DateTime.local_offset + 1.minute unless search.end_string.empty?
+       
+        if search.start_string.empty? || search.end_string.empty? || (search.start <= search.end)
+          @reservations = Reservation.order("start ASC")
+        
+          @reservations = @reservations.where("LOWER(summary) LIKE LOWER(?)", '%' + search.summary + '%') unless search.summary.empty?
+          @reservations = @reservations.where("LOWER(description) LIKE LOWER(?)", '%' + search.description + '%') unless search.description.empty?
+          @reservations = @reservations.where("start >= ?", search.start.to_s(:db)) unless search.start_string.empty?
+          @reservations = @reservations.where("end <= ?", search.end.to_s(:db)) unless search.end_string.empty?
+          @reservations = @reservations.where("room_id = ?", search.room_id) unless search.room_id == nil
+        else
+          @reservation.errors.add(:start_string, "must be before end")
+          @reservation.errors.add(:end_string, "must be after start")
+          
+          @rooms = Room.all.insert(0, Room.new(name: "--no particular room--", id: nil))
+          render action: "find"
+        end
+        
+      rescue ArgumentError
+        @reservation.errors.add(:start_string,"")
+        @reservation.errors.add(:end_string,"")
+        
+        @rooms = Room.all.insert(0, Room.new(name: "--no particular room--", id: nil))
+        render action: "find"
+      end
+      
+    end
+    
   end
 end

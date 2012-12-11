@@ -1,0 +1,38 @@
+.page-header
+  %h2
+    Reservation search
+    %br
+  %blockquote
+    %p
+      = mute(@reservation.summary.empty?, "summary contains '#{@reservation.summary}'") { "" }
+    %p.muted
+      = mute(@reservation.room_id != nil, "") { "from room '#{@reservation.room.name}'" }
+    %p
+      = mute(@reservation.start_string.empty?, "starts after '#{@reservation.start_string}'") { "" }
+    %p
+      = mute(@reservation.end_string.empty?, "ends before '#{@reservation.end_string}'") { "" }
+    %p
+      = mute(@reservation.description.empty?, "description contains '#{@reservation.description}'") { "" }
+
+= mute(@reservations, "none reservations found") do     
+  %table.table
+    %thead
+      %tr
+        %th Summary
+        %th Room
+        %th Author
+        %th Start
+        %th End
+        %th Description
+    %tbody
+      -@reservations.each do |res|
+        %tr
+          %td= link_to(res.summary, "#reservationModal" + res.id.to_s, data: { toggle: "modal" })
+          %td= link_to(res.room.name, room_path(res.room))
+          %td= mute(res.author) { link_to(res.author.login, user_path(res.author)) }
+          %td= res.start.localtime.to_s :date_time_nosec
+          %td= res.end.localtime.to_s :date_time_nosec
+          %td= cutlong(res.description, 50)
+          
+  -@reservations.each do |res|
+    = render partial: "modal", locals: {reservation: res, show_room: true}

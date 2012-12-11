@@ -1,7 +1,10 @@
 Reservoir::Application.routes.draw do
   
   resources :rooms do
-    resources :reservations 
+    resources :reservations  do
+      get '/users/show/:id/reservations', :to => "reservations#indexByUser", :as => "user_reservations"
+      
+    end
     post "/reservations/deletemany", :to => "reservations#destroymany"
   end
  
@@ -12,7 +15,8 @@ Reservoir::Application.routes.draw do
     get '/users/show/:id', :to => "registrations#show", :as => "user"   
   end
 
-  get '/users/show/:id/reservations', :to => "reservations#indexByUser", :as => "user_reservations"
+  get '/reservations/find', :to => "reservations#find"
+  post '/reservations/find', :to => "reservations#search"
   post '/search', :to => "home#search", :as => "search"
   root :to => "home#index"
 

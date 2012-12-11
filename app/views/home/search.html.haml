@@ -1,11 +1,12 @@
 .page-header
   %h2
     Search
-    %small
-      from 
-      = params[:reservation][:start_string]
-      to 
-      = params[:reservation][:end_string]
+    %blockquote
+      %p.muted
+        from 
+        = params[:reservation][:start_string]
+        to 
+        = params[:reservation][:end_string]
       
       
 %table.table
