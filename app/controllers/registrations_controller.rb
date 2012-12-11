@@ -34,6 +34,12 @@ class RegistrationsController < Devise::RegistrationsController
     
   end
   
+  def destroy
+    super
+    
+    @reservations = resource.reservations.update_all(:author_id => nil)
+  end
+  
   def edit_password
     render :edit_password
   end
@@ -41,4 +47,5 @@ class RegistrationsController < Devise::RegistrationsController
   def show
     @user = User.find(params[:id])
   end
+  
 end

@@ -1,0 +1,26 @@
+.page-header
+  %h2
+    Search
+    %small
+      from 
+      = params[:reservation][:start_string]
+      to 
+      = params[:reservation][:end_string]
+      
+      
+%table.table
+  %thead
+    %tr
+      %th Name
+      %th Capacity
+      %th Location
+      %th Equipment
+        
+  %tbody
+    - @rooms.each do |room|
+      %tr
+        %td= link_to room.name, room_path(room)
+        %td
+          .badge.badge-info= room.capacity
+        %td= mute(room.location)
+        %td= mute(room.equipment)

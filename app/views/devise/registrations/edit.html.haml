@@ -27,5 +27,7 @@
     = f.submit "Update", class: "btn btn-primary"
     = link_to "Back", :back, class: "btn"
     
-    %br
-    = link_to "Change my password", edit_user_password_path
+    %div{style: "margin-top: 15px; margin-bottom: 0px;"}
+      =link_to glyph("remove") + " Delete this account", user_registration_path, method: "delete", confirm: "Are you sure?", class: "btn btn-danger"
+    
+    = link_to "Change my password", user_password_change_path

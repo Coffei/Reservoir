@@ -16,3 +16,5 @@
         %td
           %strong Last signed in
         %td= mute(@user.last_sign_in_at, "never") { @user.last_sign_in_at.to_s(:date_time_nosec) }
+  .form-actions
+    = link_to "View reservations owned by #{@user.login}", user_reservations_path(@user)

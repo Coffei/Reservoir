@@ -5,11 +5,17 @@ class RoomsController < ApplicationController
   
   def index
     @rooms = Room.all
+    
+    respond_to do |format|
+      format.html
+      format.json { render json: @rooms }
+    end
   end
   
   def destroy
     room = Room.find(params[:id])
     
+    room.reservations.destroy_all
     room.destroy
     
     redirect_to rooms_path
@@ -50,5 +56,10 @@ class RoomsController < ApplicationController
     @room = Room.find(params[:id])
     @next_reservation = Reservation.of(@room).between(Time.now, 14.days.from_now).order("start ASC").first
     @reservation = Reservation.new
+    
+    respond_to do |format|
+      format.html
+      format.json { render json: @room }
+    end
   end
 end

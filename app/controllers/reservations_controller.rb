@@ -1,6 +1,6 @@
 class ReservationsController < ApplicationController
-  before_filter :authenticate_user!, except: [:index, :show]
-  DATETIME_FORMAT = "%m/%d/%Y %H:%M"
+  before_filter :authenticate_user!, except: [:index, :show, :indexByUser]
+  DATETIME_FORMAT = Time::DATE_FORMATS[:date_time_nosec]
   
   def index
     @room = Room.find(params[:room_id])
@@ -12,6 +12,7 @@ class ReservationsController < ApplicationController
     respond_to do |format|
       format.html
       format.js { render :json => @reservations }
+      format.json { render :json => @reservations.map { |r| r.as_public_json } }
     end
   end
   
@@ -26,6 +27,7 @@ class ReservationsController < ApplicationController
     respond_to do |format|
       format.html
       format.js { render :json => @reservations }
+      format.json { render :json => @reservations.map { |r| r.as_public_json } }
     end
   end
   
@@ -34,7 +36,8 @@ class ReservationsController < ApplicationController
     
     respond_to do |format|
       format.html
-      format.js { render :json => @reservation.to_json }
+      format.js { render :json => @reservation }
+      format.json { render :json => @reservation.as_public_json }
     end
   end
   
@@ -51,8 +54,6 @@ class ReservationsController < ApplicationController
       @reservation.author = current_user
       @reservation.start = DateTime.strptime(params[:reservation][:start_string], DATETIME_FORMAT) - DateTime.local_offset
       @reservation.end = DateTime.strptime(params[:reservation][:end_string], DATETIME_FORMAT) - DateTime.local_offset
-      @reservation.start -= DateTime.local_offset
-      @reservation.end -= DateTime.local_offset
       
       error = !@reservation.save
     rescue ArgumentError

@@ -15,8 +15,8 @@
           %td= link_to room.name, room_path(room)
           %td
             %span.badge.badge-info= room.capacity
-          %td= room.location
-          %td= room.equipment
+          %td= mute(room.location)
+          %td= mute(room.equipment)
           %td
             -if user_signed_in?
               .btn-group

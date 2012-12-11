@@ -1,187 +1,69 @@
--@sidelinks = {:header => "Hlavička", "A-class" => "#aaa", "B-class" => "#bbb", "C-class" => "#ccc", "D-class" => "#ddd"}
+-@sidelinks = {glyph("search") + "Find a free room" => "#findroom", glyph("star") + "Most used rooms" => "#bestrooms", glyph("plus-sign") + "Newest reservations" => "#newreservations"}
 -@spy = true
 
 .page-header
-  %h1 Listing products
-%p Find me in app/views/home/index.html.haml
-= translate "hello"
-.row
-  .span4
-    .well{"data-spy" => "affix", "data-offset-top" => "200" }
-      Some very long text
-  .span6
-    %h3#aaa aaa
-    aaa
-    %br
-    aaa
-    %br
-    aaa
-    %br
-    aaa
-    %br
-    aaa
-    %br
-    aaa
-    %br
-    aaa
-    %br
-    aaa
-    %br
-    aaa
-    %br
-    aaa
-    %br
-    aaa
-    %br
-    aaa
-    %br
-    aaa
-    %br
-    aaa
-    %br
-    aaa
-    %br
-    aaa
-    %br
-    aaa
-    %br
-    aaa
-    %br
-    
-    %h3#bbb bbb
-    bbb
-    %br
-    bbb
-    %br
-    bbb
-    %br
-    bbb
-    %br
-    bbb
-    %br
-    bbb
-    %br
-    bbb
-    %br
-    bbb
-    %br
-    bbb
-    %br
-    bbb
-    %br
-    bbb
-    %br
-    bbb
-    %br
-    bbb
-    %br
-    bbb
-    %br
-    bbb
-    %br
-    bbb
-    %br
-    bbb
-    %br
-    bbb
-    %br
-    bbb
-    %br
-    bbb
-    %br
-    bbb
-    %br
-    
-    %h3#ccc ccc
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    ccc
-    %br
-    
-    %h3#ddd ddd
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
-    ddd
-    %br
+  %h1 Welcome to Reservoir
+  
+#findroom
+  %h2 Find a free room
+  .well{style: "width: 60%"}
+    = form_for(@search, url: search_path, html: { class: "form-inline"}) do |f|
+      %p
+        = glyph("search")
+        %strong Enter desired date and time of reservation
+      = f.hidden_field :summary, value: "search"
+      = f.text_field :start_string, placeholder: "start time", class: "input-medium"
+      &nbsp;to&nbsp;
+      = f.text_field :end_string, placeholder: "end time", class: "input-medium"
+      = f.submit" Find me a room!", class: "btn btn-primary"
+     
+
+#bestrooms
+  %h2 Most used rooms
+  = mute(@best_rooms, "no rooms scheduled for use") do
+    %table.table.table-striped.table-hover
+      %thead
+        %tr
+          %th Name
+          %th Capacity
+          %th Location
+          %th Equipment
+      %tbody
+        - @best_rooms.each do |room|
+          %tr
+            %td= link_to(room.name, room_path(room))
+            %td
+              %span.badge.badge-info= room.capacity
+            %td= mute(room.location)
+            %td= mute(room.equipment)
+              
+  
+  
+#newreservations
+  %h2 Newest reservations
+  = mute(@last_reservations, "no reservations") do
+    %table.table.table-striped.table-hover
+      %thead
+        %tr
+          %th Summary
+          %th Room
+          %th Author
+          %th Start
+          %th End
+          %th Description
+      %tbody
+        -@last_reservations.each do |res|
+          %tr
+            %td= link_to res.summary, "#reservationModal" + res.id.to_s, data: {toggle: "modal"} 
+            %td= link_to res.room.name, room_path(res.room)
+            %td
+              = mute(res.author, "none") { link_to res.author.login, user_path(res.author) }
+            %td= res.start.localtime.to_s :date_time_nosec
+            %td= res.end.localtime.to_s :date_time_nosec
+            %td= cutlong(res.description, 50)
+            
+            
+    -@last_reservations.each do |res|
+      = render partial: "reservations/modal", locals: {reservation: res, show_room: true}
+              
+          

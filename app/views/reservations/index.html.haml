@@ -1,6 +1,6 @@
 -content_for :script do
   :javascript
-    var reservationsFeed = "#{room_reservations_path(@room)}"
+    var reservationsFeed = "#{room_reservations_path(@room)}.js"
 
 .page-header
   %h2
@@ -31,9 +31,9 @@
             %tr
               %td
                 
-                %input.manyinput{type: "checkbox", name: "deleteids[#{res.id}]", value: "1", style: "display: none"}
+                %input.manyinput{type: "checkbox", name: "deleteids[#{res.id}]", value: "1", style: "display: none", class: reservation_class(res)}
                 = res.summary
-              %td= link_to res.author.login, user_path(res.author)
+              %td= mute(res.author, "none") { link_to(res.author.login, user_path(res.author)) }
               %td= res.start.localtime.to_s :date_time_nosec
               %td= res.end.localtime.to_s :date_time_nosec
               %td= cutlong(res.description, 40)
@@ -43,11 +43,13 @@
                     = link_to content_tag(:span,'', class: "icon-cog") + " Edit", edit_room_reservation_path(@room, res), class: "btn btn-small"
                     = link_to content_tag(:span,'', class: "icon-remove") + " Delete", room_reservation_path(@room, res), method: :delete, class:"btn btn-danger btn-small", data: {confirm: "Are you sure?"}
       
-      %a.btn#manyswitch{href: "#"} Select many
-      .form-actions#manyaction{style: "display: none;"}
-        %input.btn.btn-danger{type: "submit", value: "Delete all selected"}
-        .pull-right
-          %a.close#manyclose{href: "#"} &times;
+      -if user_signed_in?
+        %a.btn#manyswitch{href: "#"} Select many
+        .form-actions#manyaction{style: "display: none;"}
+          %input.btn.btn-danger{type: "submit", value: "Delete all selected"}
+          %a.btn.btn-info#selectpast Select reservations in the past
+          .pull-right
+            %a.close#manyclose{href: "#"} &times;
     
       
             

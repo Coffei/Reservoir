@@ -1,0 +1,33 @@
+.page-header
+  %h2
+    = @reservation.summary
+    %small=link_to @reservation.room.name, room_path(@reservation.room)
+   
+%table.table.table-bordered{style: "width: 50%"}
+  %tbody
+    %tr
+      %td
+        %strong Author
+      %td
+        = mute(@reservation.author) do
+          = link_to @reservation.author.login, user_path(@reservation.author)
+    %tr
+      %td
+        %strong Start
+      %td= @reservation.start.to_s :date_time_nosec
+    %tr
+      %td
+        %strong End
+      %td= @reservation.end.to_s :date_time_nosec
+
+%strong Description: 
+%blockquote
+  = mute(@reservation.description)
+  
+-if user_signed_in?
+  .form-actions
+    .btn-group
+      = link_to glyph("cog") + " Edit", edit_room_reservation_path(@reservation.room, @reservation), class: "btn"
+      = link_to glyph("remove") + " Delete", room_reservation_path(@reservation.room, @reservation), class: "btn btn-danger", "data-method" => "delete", "data-confirm" => "Are you sure?"
+  
+  

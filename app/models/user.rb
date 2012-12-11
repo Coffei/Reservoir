@@ -4,7 +4,8 @@ class User < ActiveRecord::Base
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :authentication_keys => [:login]
-  has_many :reservations
+         
+  has_many :reservations, foreign_key: :author_id
   # Setup accessible (or protected) attributes for your model
   attr_accessible :login, :password, :password_confirmation, :remember_me, :email, :name
   # attr_accessible :title, :body

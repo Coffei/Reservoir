@@ -19,6 +19,8 @@ $("#manyclose").click(function() {
   return false;
 });
 
+$("#selectpast").click(selectPastEvents);
+
 if(typeof reservationsFeed != 'undefined') {
 	$("#calendar").fullCalendar({
 		events: reservationsFeed,
@@ -76,7 +78,11 @@ function fillReservationModal(event) {
 	//non-permanent fields
 	author = $("#reservationModal #authorField");
 	if(author.size() != 0) {
-		author.html('<a href="/users/show/' + event.author.id + '">' + event.author.login + '</a>');
+		if(event.author!=null) {
+			author.html('<a href="/users/show/' + event.author.id + '">' + event.author.login + '</a>');
+		} else {
+			author.html('<p class="muted" style="margin-bottom: 0px;">none</p>');
+		}
 	}
 	
 	room = $("#reservationModal #roomField");
@@ -96,6 +102,14 @@ function formatDate(date) {
 	return m + "/" + d + "/" + y + " " + h + ":" + min.toString().lpad("0",2); 
 }
 
+function selectPastEvents() {
+	boxes = $(".pastevent")
+	for(i = 0; i < boxes.size(); i++) {
+		boxes[i].checked = true;
+	}
+	
+	return false;
+}
 
 String.prototype.lpad = function(padString, length) {
 	var str = this;
