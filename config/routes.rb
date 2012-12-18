@@ -1,20 +1,19 @@
 Reservoir::Application.routes.draw do
   
   resources :rooms do
-    resources :reservations  do
-      get '/users/show/:id/reservations', :to => "reservations#indexByUser", :as => "user_reservations"
-      
-    end
+    resources :reservations 
     post "/reservations/deletemany", :to => "reservations#destroymany"
   end
  
-  devise_for :users, controllers: { registrations: "registrations" } do
+  devise_for :users, controllers: { registrations: "registrations" }
+  devise_scope :user  do
     get '/login', :to => 'devise/sessions#new', :as => "login"
     get '/register', :to => 'devise/registrations#new', :as => "register"
     get '/users/edit/password', :to => 'registrations#edit_password', :as => "user_password_change"
     get '/users/show/:id', :to => "registrations#show", :as => "user"   
   end
 
+  get '/users/show/:id/reservations', :to => "reservations#indexByUser", :as => "user_reservations"
   get '/reservations/find', :to => "reservations#find"
   post '/reservations/find', :to => "reservations#search"
   post '/search', :to => "home#search", :as => "search"
