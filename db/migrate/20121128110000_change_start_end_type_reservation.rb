@@ -1,11 +1,15 @@
 class ChangeStartEndTypeReservation < ActiveRecord::Migration
   def up
-    change_column(:reservations, :start, :datetime)
-    change_column(:reservations, :end, :datetime)
+    remove_column(:reservations, :start)
+    remove_column(:reservations, :end)
+    add_column(:reservations, :start, :datetime)
+    add_column(:reservations, :end, :datetime)
   end
   
   def down
-    change_column(:reservations, :start, :time)
-    change_column(:reservations, :end, :time)
+    remove_column(:reservations, :start)
+    remove_column(:reservations, :end)
+    add_column(:reservations, :start, :time)
+    add_column(:reservations, :end, :time)
   end
 end

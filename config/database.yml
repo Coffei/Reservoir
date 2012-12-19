@@ -16,9 +16,10 @@ test:
   timeout: 5000
 
 production:
-  adapter: postgresql
+  adapter: jdbcpostgresql
   encoding: unicode
   database: reservoir
   pool: 5
   username: reservoir
   password: reservoir
+  
