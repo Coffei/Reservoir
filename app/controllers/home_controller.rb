@@ -3,7 +3,7 @@ class HomeController < ApplicationController
   
   def index
     @search = Reservation.new if !defined?(@search)
-    @best_rooms = Room.joins("LEFT OUTER JOIN reservations ON reservations.room_id = rooms.id").group("rooms.id, rooms.name, rooms.capacity, rooms.location, rooms.equipment rooms.created_at, rooms.updated_at")
+    @best_rooms = Room.joins("LEFT OUTER JOIN reservations ON reservations.room_id = rooms.id").group("rooms.id, rooms.name, rooms.capacity, rooms.location, rooms.equipment, rooms.created_at, rooms.updated_at")
                       .where("reservations.\"end\" >= ? AND reservations.\"start\" <= ?", DateTime.now.to_s(:db), (DateTime.now + 14.days).to_s(:db))
                       .order("count(reservations.id) DESC")
                       .limit(params[:limit_room]? params[:limit_room].to_i : 5)
