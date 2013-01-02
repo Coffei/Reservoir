@@ -18,8 +18,8 @@ class Reservation < ActiveRecord::Base
   
   scope :between, lambda {|start,end_date| where("\"end\" >= ? AND \"start\" <= ?", start.utc, end_date.utc) }
   scope :of, lambda {|room| where(:room_id => room.id)}
-  scope :after, lambda {|start_time| where("\"start\" >= ?", Reservation.format_date(start_time))}
-  scope :before, lambda {|end_time| where("\"end\" < ?", Reservation.format_date(end_time))}
+  scope :after, lambda {|start_time| where("\"end\" >= ?", Reservation.format_date(start_time))}
+  scope :before, lambda {|end_time| where("\"start\" < ?", Reservation.format_date(end_time))}
   
   def is_running
     return start.localtime <= Time.now && self.end.localtime >= Time.now 
@@ -52,6 +52,6 @@ class Reservation < ActiveRecord::Base
   end
   
   def self.format_date(date_time)
-    Time.at(date_time.to_i).to_formatted_s(:db)
+    Time.at(date_time.to_i).utc.to_formatted_s(:db)
   end
 end
