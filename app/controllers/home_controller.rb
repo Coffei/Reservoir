@@ -3,8 +3,8 @@ class HomeController < ApplicationController
   
   def index
     @search = Reservation.new if !defined?(@search)
-    @best_rooms = Room.joins("LEFT OUTER JOIN reservations ON reservations.room_id = rooms.id").group("rooms.id")
-                      .where("reservations.end >= ? AND reservations.start <= ?", DateTime.now.to_s(:db), (DateTime.now + 14.days).to_s(:db))
+    @best_rooms = Room.joins("LEFT OUTER JOIN reservations ON reservations.room_id = rooms.id").group("rooms.id, rooms.name, rooms.capacity, rooms.location, rooms.equipment rooms.created_at, rooms.updated_at")
+                      .where("reservations.\"end\" >= ? AND reservations.\"start\" <= ?", DateTime.now.to_s(:db), (DateTime.now + 14.days).to_s(:db))
                       .order("count(reservations.id) DESC")
                       .limit(params[:limit_room]? params[:limit_room].to_i : 5)
     @last_reservations = Reservation.order("created_at DESC").limit(params[:limit_res]? params[:limit_res].to_i : 5)
@@ -29,7 +29,7 @@ class HomeController < ApplicationController
       index
       render action: "index"
     else
-      @rooms = Room.where("rooms.id NOT IN (SELECT reservations.room_id FROM reservations WHERE reservations.room_id = rooms.id AND reservations.end >= ? AND reservations.start <= ?)",
+      @rooms = Room.where("rooms.id NOT IN (SELECT reservations.room_id FROM reservations WHERE reservations.room_id = rooms.id AND reservations.\"end\" >= ? AND reservations.\"start\" <= ?)",
                           @search.start, @search.end).order("name ASC")
      
      respond_to do |format|

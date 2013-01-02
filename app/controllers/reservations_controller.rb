@@ -4,7 +4,7 @@ class ReservationsController < ApplicationController
   
   def index
     @room = Room.find(params[:room_id])
-    @reservations = Reservation.of(@room).order("start ASC")
+    @reservations = Reservation.of(@room).order("\"start\" ASC")
     
     @reservations = @reservations.after(params[:start]) if params[:start]
     @reservations = @reservations.before(params[:end]) if params[:end]
@@ -19,7 +19,7 @@ class ReservationsController < ApplicationController
   def indexByUser
     @user = User.find(params[:id])
     
-    @reservations = Reservation.where(author_id: @user.id).order("start ASC")
+    @reservations = Reservation.where(author_id: @user.id).order("\"start\" ASC")
     
     @reservations = @reservations.after(params[:start]) if params[:start]
     @reservations = @reservations.before(params[:end]) if params[:end]
@@ -153,12 +153,12 @@ class ReservationsController < ApplicationController
         search.end = DateTime.strptime(params[:reservation][:end_string], DATETIME_FORMAT) - DateTime.local_offset + 1.minute unless search.end_string.empty?
        
         if search.start_string.empty? || search.end_string.empty? || (search.start <= search.end)
-          @reservations = Reservation.order("start ASC")
+          @reservations = Reservation.order("\"start\" ASC")
         
           @reservations = @reservations.where("LOWER(summary) LIKE LOWER(?)", '%' + search.summary + '%') unless search.summary.empty?
           @reservations = @reservations.where("LOWER(description) LIKE LOWER(?)", '%' + search.description + '%') unless search.description.empty?
-          @reservations = @reservations.where("start >= ?", search.start.to_s(:db)) unless search.start_string.empty?
-          @reservations = @reservations.where("end <= ?", search.end.to_s(:db)) unless search.end_string.empty?
+          @reservations = @reservations.where("\"start\" >= ?", search.start.to_s(:db)) unless search.start_string.empty?
+          @reservations = @reservations.where("\"end\" <= ?", search.end.to_s(:db)) unless search.end_string.empty?
           @reservations = @reservations.where("room_id = ?", search.room_id) unless search.room_id == nil
         else
           @reservation.errors.add(:start_string, "must be before end")

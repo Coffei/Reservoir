@@ -54,7 +54,7 @@ class RoomsController < ApplicationController
   
   def show
     @room = Room.find(params[:id])
-    @next_reservation = Reservation.of(@room).between(Time.now, 14.days.from_now).order("start ASC").first
+    @next_reservation = Reservation.of(@room).between(Time.now, 14.days.from_now).order("\"start\" ASC").first
     @reservation = Reservation.new
     
     respond_to do |format|
