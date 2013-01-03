@@ -6,20 +6,22 @@ Currently, Reservoir is using JRuby and can be deployed on JBoss (or any other
 JavaEE container). First ensure you have JRuby installed (the version should support Ruby 1.9 syntax).
 Then just follow these few steps:
 1. Setup your database:
-       Reservoir is configured to use Postgresql. If you want to use othe
+       Reservoir is configured to use Postgresql. If you want to use other
        DBMS you need to make some additional changes (if not follow step 1.2):
        1.1. Replace jdbcpostgresql adapter in GEMFILE with proper adapters for the
-       DB of your choice.
+	    DB of your choice.
+	    
        1.2. Ensure your DB is running and is accessible from the machine where Reservoir
-       is about to be deployed and from this machine.
+	    is about to be deployed and from this machine.
        1.3. Configure your DB in reservoir by editing config/database.yml file. 
               (See rails tutorials for further instruction). By default it is using postgres
               database named "reservoir" on localhost with username and password "reservoir".
 2. Setup Reservoir:
        2.1. Run "bundle install" in the Reservoir dir.
-       2.2. Run "bundle exec rake assets:precompile"
-              Note: This command might take a while (you can run it with --trace to see the progress)
-       2.3 Package Reservoir to war by command "warble war".
+       2.2. Run "bundle exec rake db:migrate" to create tables with appropriate schema.
+       2.3. Run "bundle exec rake assets:precompile" to compile assets
+            Note: This command might take a while (you can run it with --trace to see the progress)
+       2.4 Package Reservoir to war by command "warble war".
 3. Deploy:
        You can now deploy the generated war file to your JavaEE container.         
 		

@@ -16,12 +16,12 @@ ActiveRecord::Schema.define(:version => 20121128110000) do
   create_table "reservations", :force => true do |t|
     t.integer  "room_id"
     t.integer  "author_id"
-    t.datetime "start"
-    t.datetime "end"
     t.text     "description"
     t.string   "summary"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+    t.datetime "start"
+    t.datetime "end"
   end
 
   add_index "reservations", ["author_id"], :name => "index_reservations_on_author_id"
