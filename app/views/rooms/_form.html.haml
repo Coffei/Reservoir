@@ -27,6 +27,12 @@
       = f.text_field :equipment, placeholder: "equipment"
       -unless @room.errors[:equipment].empty?
         %p.text-error-inline= @room.errors[:equipment].join(", ")
+  .control-group
+    = f.label :cal_url, "Calendar url", class: "control-label"
+    .controls
+      = f.text_field :cal_url, class: "input-long", placeholder: "url to calendar"
+      -unless @room.errors[:cal_url].empty?
+        %p.text-error-inline= @room.errors[:cal_url].join(", ")
           
   
   .form-actions

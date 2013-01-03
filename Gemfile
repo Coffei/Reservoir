@@ -15,6 +15,7 @@ gem 'activerecord-jdbcpostgresql-adapter', "1.2.2.1"
 gem 'jdbc-postgres', "9.1.901"
 gem 'activerecord-jdbcsqlite3-adapter'
 gem 'jruby-openssl'
+gem 'ri_cal'
 
 group :development do
   gem 'pry'

@@ -9,6 +9,12 @@ class ReservationsController < ApplicationController
     @reservations = @reservations.after(params[:start]) if params[:start]
     @reservations = @reservations.before(params[:end]) if params[:end]
     
+    #retrieve events from calendar url
+    
+    calevents = get_room_reservations_from_calendar(@room)
+    unless(calevents == nil)
+      @reservations.concat(calevents)
+    end
     respond_to do |format|
       format.html
       format.js { render :json => @reservations }

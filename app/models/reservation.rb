@@ -33,9 +33,9 @@ class Reservation < ActiveRecord::Base
       :start => self.start.rfc822,
       :end => self.end.rfc822,
       :allDay => false,
-      :room => self.room.as_json,
+      :room => (self.room ? self.room.as_json : "" ),
       :author => self.author.as_json,
-      :url => Rails.application.routes.url_helpers.room_reservation_path(self.room, self)
+      :url => (self.id ? Rails.application.routes.url_helpers.room_reservation_path(self.room, self) : "")
     }
   end
   
