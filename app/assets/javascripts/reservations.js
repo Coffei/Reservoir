@@ -23,7 +23,7 @@ $("#selectpast").click(selectPastEvents);
 
 if(typeof reservationsFeed != 'undefined') {
 	$("#calendar").fullCalendar({
-		events: reservationsFeed,
+		eventSources: reservationsFeeds,
 		theme: true,
 		firstDay: 1,
 		aspectRatio: 2,
@@ -71,15 +71,15 @@ function fillReservationModal(event) {
 	$("#reservationModal #startField").html(formatDate(event.start));
 	$("#reservationModal #endField").html(formatDate(event.end));
 	$("#reservationModal #descriptionField").html(event.description);
-	$("#reservationModal #editLink").attr("href", "/reservoir/rooms/" + event.room.id + "/reservations/" + event.id + "/edit");
-	$("#reservationModal #deleteLink").attr("href", "/reservoir/rooms/" + event.room.id + "/reservations/" + event.id);
+	$("#reservationModal #editLink").attr("href", root_path + "/rooms/" + event.room.id + "/reservations/" + event.id + "/edit");
+	$("#reservationModal #deleteLink").attr("href", root_path + "/rooms/" + event.room.id + "/reservations/" + event.id);
 	$("#reservationModal #deleteLink").attr("data-method", "delete");
 	
 	//non-permanent fields
 	author = $("#reservationModal #authorField");
 	if(author.size() != 0) {
 		if(event.author!=null) {
-			author.html('<a href="/reservoir/users/show/' + event.author.id + '">' + event.author.login + '</a>');
+			author.html('<a href= "' + root_path + '/users/show/' + event.author.id + '">' + event.author.login + '</a>');
 		} else {
 			author.html('<p class="muted" style="margin-bottom: 0px;">none</p>');
 		}
@@ -87,7 +87,7 @@ function fillReservationModal(event) {
 	
 	room = $("#reservationModal #roomField");
 	if(room.size() != 0) {
-		room.html('<a href="/reservoir/rooms/' + event.room.id + '">' + event.room.name + '</a>')
+		room.html('<a href="' + root_path + '/rooms/' + event.room.id + '">' + event.room.name + '</a>')
 	}
 	
 }
