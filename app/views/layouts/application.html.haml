@@ -19,8 +19,8 @@
     -if content_for?(:script)
       = yield(:script)
         
-      
-
+    :javascript
+      var root_path = "#{ENV['RAILS_RELATIVE_URL_ROOT']}"
 
   
   %body{@spy? {"data-spy" => "scroll", "data-target" => "#sidebar" } : {}}

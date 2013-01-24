@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.8'
+gem 'rails', '3.2.11'
 gem 'jquery-rails', "2.1.4"
 gem 'haml', "3.1.7"
 gem 'haml-rails', "0.3.5"
@@ -16,6 +16,8 @@ gem 'jdbc-postgres', "9.1.901"
 gem 'activerecord-jdbcsqlite3-adapter'
 gem 'jruby-openssl'
 gem 'ri_cal'
+gem 'jruby-rack-worker', platform: :jruby, require: nil
+gem 'delayed_job_active_record'
 
 group :development do
   gem 'pry'

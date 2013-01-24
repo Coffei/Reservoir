@@ -1,8 +1,9 @@
 Reservoir::Application.routes.draw do
   
   resources :rooms do
-    resources :reservations 
+    get "/reservations/remote", :to => "reservations#index_remote"
     post "/reservations/deletemany", :to => "reservations#destroymany"
+    resources :reservations 
   end
  
   devise_for :users, controllers: { registrations: "registrations" }
@@ -17,6 +18,9 @@ Reservoir::Application.routes.draw do
   get '/reservations/find', :to => "reservations#find"
   post '/reservations/find', :to => "reservations#search"
   post '/search', :to => "home#search", :as => "search"
+  
+  get '/remote/calendar/start', :to => "rooms#start_remotecal_worker"
+  
   root :to => "home#index"
 
   # The priority is based upon order of creation:

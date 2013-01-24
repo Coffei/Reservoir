@@ -1,7 +1,6 @@
 class RoomsController < ApplicationController
   
-  before_filter :authenticate_user!, except: [:index, :show]
-  
+  before_filter :authenticate_user!, except: [:index, :show, :start_remotecal_worker]
   
   def index
     @rooms = Room.all
@@ -61,5 +60,11 @@ class RoomsController < ApplicationController
       format.html
       format.json { render json: @room }
     end
+  end
+  
+  def start_remotecal_worker
+    Delayed::Job.enqueue(RemoteCalendar.new)
+    
+    render text: "OK"
   end
 end

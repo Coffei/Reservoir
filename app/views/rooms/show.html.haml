@@ -2,7 +2,7 @@
 -@spy = true
 -content_for :script do
   :javascript
-    var reservationsFeed = "#{room_reservations_path(@room)}.js"
+    var reservationsFeeds = ["#{room_reservations_path(@room)}.js", "#{room_reservations_remote_path(@room)}.js" ]
 
 .hero-unit#basic
   %h1= @room.name
@@ -26,7 +26,9 @@
     =link_to content_tag(:span, '', class: "icon-remove") + " Delete", @room, method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure?"}
         
 #reservations
-  %h2 Reservations
+  %h2 
+    Reservations
+    %small#loading (started)
   #calendar
     
 #newreservation

@@ -1,5 +1,5 @@
 class ReservationsController < ApplicationController
-  before_filter :authenticate_user!, except: [:index, :show, :indexByUser, :find, :search]
+  before_filter :authenticate_user!, except: [:index, :show, :indexByUser, :find, :search, :index_remote]
   DATETIME_FORMAT = Time::DATE_FORMATS[:date_time_nosec]
   
   def index
@@ -11,14 +11,22 @@ class ReservationsController < ApplicationController
     
     #retrieve events from calendar url
     
-    calevents = get_room_reservations_from_calendar(@room)
-    unless(calevents == nil)
-      @reservations.concat(calevents)
-    end
+    
     respond_to do |format|
       format.html
       format.js { render :json => @reservations }
       format.json { render :json => @reservations.map { |r| r.as_public_json } }
+    end
+  end
+  
+  def index_remote
+    @room = Room.find(params[:room_id])
+    @reservations = TempReservation.of(@room)
+    
+    @reservations = @reservations.after(params[:start]) if params[:start]
+    @reservations = @reservations.before(params[:end]) if params[:end]
+    respond_to do |format|
+      format.js { render :json => @reservations }
     end
   end
   

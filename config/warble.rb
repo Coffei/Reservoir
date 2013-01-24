@@ -11,7 +11,7 @@ Warbler::Config.new do |config|
   # config.features = %w(gemjar)
 
   # Application directories to be included in the webapp.
-  config.dirs = %w(app config lib log vendor tmp)
+  config.dirs = %w(app config lib log vendor tmp db)
 
   # Additional files/directories to include, above those in config.dirs
   # config.includes = FileList["db"]
@@ -100,7 +100,7 @@ Warbler::Config.new do |config|
   # web.xml by default. If there is an .erb-File it will be processed
   # with webxml-config. You may want to exclude this file via
   # config.excludes.
-  # config.webinf_files += FileList["jboss-web.xml"]
+  config.webinf_files += FileList["jboss-web.xml"]
 
   # Files to be included in the root of the webapp.  Note that files in public
   # will have the leading 'public/' part of the path stripped during staging.
@@ -117,7 +117,7 @@ Warbler::Config.new do |config|
   # config.webserver = 'jetty'
 
   # Value of RAILS_ENV for the webapp -- default as shown below
-  #config.webxml.rails.env = ENV['RAILS_ENV'] || 'production' 
+  config.webxml.rails.env = 'development' #ENV['RAILS_ENV'] || 'production' 
   
   # Application booter to use, one of :rack, :rails, or :merb (autodetected by default)
   # config.webxml.booter = :rails
@@ -125,6 +125,8 @@ Warbler::Config.new do |config|
   # Set JRuby to run in 1.9 mode.
   config.webxml.jruby.compat.version = "1.9"
 
+
+  
   # When using the :rack booter, "Rackup" script to use.
   # - For 'rackup.path', the value points to the location of the rackup
   # script in the web archive file. You need to make sure this file
