@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130123131800) do
+ActiveRecord::Schema.define(:version => 20130129135900) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -34,10 +34,11 @@ ActiveRecord::Schema.define(:version => 20130123131800) do
     t.integer  "author_id"
     t.text     "description"
     t.string   "summary"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.datetime "start"
     t.datetime "end"
+    t.text     "scheduleyaml"
   end
 
   add_index "reservations", ["author_id"], :name => "index_reservations_on_author_id"
@@ -59,8 +60,9 @@ ActiveRecord::Schema.define(:version => 20130123131800) do
     t.datetime "end"
     t.text     "description"
     t.string   "summary"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.text     "scheduleyaml"
   end
 
   add_index "temp_reservations", ["room_id"], :name => "index_temp_reservations_on_room_id"

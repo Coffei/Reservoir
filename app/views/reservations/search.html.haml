@@ -23,15 +23,19 @@
         %th Author
         %th Start
         %th End
+        %th Recurrence
         %th Description
     %tbody
       -@reservations.each do |res|
-        %tr
-          %td= link_to(res.summary, "#reservationModal" + res.id.to_s, data: { toggle: "modal" })
+        %tr{class: (res.type==:remote ? "success" : "")}
+          %td= link_to(res.summary, "#reservationModal" + res.sid, data: { toggle: "modal" })
           %td= link_to(res.room.name, room_path(res.room))
           %td= mute(res.author) { link_to(res.author.login, user_path(res.author)) }
           %td= res.start.localtime.to_s :date_time_nosec
           %td= res.end.localtime.to_s :date_time_nosec
+          %td
+            = mute(res.schedule, "no recurrence") do
+              = res.schedule.to_s
           %td= cutlong(res.description, 50)
           
   -@reservations.each do |res|

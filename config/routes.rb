@@ -1,8 +1,10 @@
 Reservoir::Application.routes.draw do
   
+  get '/rooms/remote/calendar/update', :to => "rooms#start_remotecal_worker", :as => "remote_calendar_update"
   resources :rooms do
     get "/reservations/remote", :to => "reservations#index_remote"
     post "/reservations/deletemany", :to => "reservations#destroymany"
+    get "/remote/calendar/update", :to => "rooms#start_remotecal_worker", :as => "remote_calendar_update"
     resources :reservations 
   end
  
@@ -19,7 +21,7 @@ Reservoir::Application.routes.draw do
   post '/reservations/find', :to => "reservations#search"
   post '/search', :to => "home#search", :as => "search"
   
-  get '/remote/calendar/start', :to => "rooms#start_remotecal_worker"
+  
   
   root :to => "home#index"
 

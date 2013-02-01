@@ -1,14 +1,18 @@
-class RemoteCalendar
+class RemoteCalendar < Struct.new(:room_id)
   def perform
-    Room.all.each do |room|
-     room.fetch_remote_calendar
+    if(room_id)
+      Room.where(id: room_id).each do |room|
+        room.fetch_remote_calendar
+      end
+      # no rescheduling
+      puts "Remote calendar updated."
+    else
+      Room.all.each do |room|
+      room.fetch_remote_calendar
     end
-
-    # sleep 10
-    # File.open("abcde" + Time.now.to_i.to_s, 'w')
-
-    puts "Remote calendars downloaded."
-    Delayed::Job.enqueue(RemoteCalendar.new, run_at: 10.minutes.from_now)
+      puts "Remote calendars updated."
+      Delayed::Job.enqueue(RemoteCalendar.new, run_at: 10.minutes.from_now)
+    end
   end
 
 end

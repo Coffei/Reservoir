@@ -1,4 +1,4 @@
-.modal.hide.fade{id: "reservationModal" + (defined?(reservation)? reservation.id.to_s : "") ,role: "dialog", "aria-labelledby" => "reservationLabel", "aria-hidden" => "true"}
+.modal.hide.fade{id: "reservationModal" + (defined?(reservation)? reservation.sid : "") ,role: "dialog", "aria-labelledby" => "reservationLabel", "aria-hidden" => "true"}
   .modal-header
     %button.close{type: "button", "data-dismiss" => "modal", "aria-hidden" => "true"} &times;
     %h3#reservationLabel
@@ -35,6 +35,13 @@
           %td#endField
             -if defined?(reservation)
               = reservation.end.to_s :date_time_nosec
+        %tr
+          %td
+            %strong Recurrence
+          %td#recField
+            - if (defined?(reservation))
+              = mute(reservation.recurs?, "no recurrence") do
+                = reservation.schedule.to_s
     %h4 Description:
     %blockquote
       %p#descriptionField
@@ -43,10 +50,10 @@
   .modal-footer
     .btn-group
       -if user_signed_in?
-        %a.btn#editLink{href: (defined?(reservation)? edit_room_reservation_path(reservation.room, reservation): "#")}
+        %a.btn#editLink{href: (defined?(reservation)? edit_room_reservation_path(reservation.room, reservation): "#"), style: ((defined?(reservation) && reservation.type == :remote)? "display:none" : "")}
           = glyph("cog")
           Edit
-        %a.btn.btn-danger#deleteLink{"data-confirm" => "Are you sure?", "data-method" => "delete", href: (defined?(reservation)? room_reservation_path(reservation.room, reservation) : "#")}
+        %a.btn.btn-danger#deleteLink{"data-confirm" => "Are you sure?", "data-method" => "delete", href: (defined?(reservation)? room_reservation_path(reservation.room, reservation) : "#"), style: ((defined?(reservation) && reservation.type == :remote)? "display:none" : "")}
           = glyph "remove"
           Delete
       %button.btn.btn-primary{type: "button", "data-dismiss" => "modal", "aria-hidden" => "true"} Close

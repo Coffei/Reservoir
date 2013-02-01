@@ -1,4 +1,4 @@
--@sidelinks = {glyph("search") + "Find a free room" => "#findroom", glyph("star") + "Most used rooms" => "#bestrooms", glyph("plus-sign") + "Newest reservations" => "#newreservations"}
+-@sidelinks = {glyph("search") + "Find a free room" => "#findroom", glyph("star") + "Free rooms" => "#freerooms",  glyph("play-circle") + "Running reservations" => "#running"}
 -@spy = true
 
 .page-header
@@ -16,11 +16,10 @@
       &nbsp;to&nbsp;
       = f.text_field :end_string, placeholder: "end time", class: "input-medium"
       = f.submit" Find me a room!", class: "btn btn-primary"
-     
 
-#bestrooms
-  %h2 Most used rooms
-  = mute(@best_rooms, "no rooms scheduled for use") do
+#freerooms
+  %h2 Free rooms
+  = mute(@free_rooms, "no room available") do
     %table.table.table-striped.table-hover
       %thead
         %tr
@@ -29,19 +28,17 @@
           %th Location
           %th Equipment
       %tbody
-        - @best_rooms.each do |room|
+        -@free_rooms.each do |room|
           %tr
             %td= link_to(room.name, room_path(room))
             %td
               %span.badge.badge-info= room.capacity
             %td= mute(room.location)
-            %td= mute(room.equipment)
-              
-  
-  
-#newreservations
-  %h2 Newest reservations
-  = mute(@last_reservations, "no reservations") do
+            %td= mute(room.equipment)       
+
+#running
+  %h2 Running reservations
+  = mute(@reservations_running, "no reservation is running") do
     %table.table.table-striped.table-hover
       %thead
         %tr
@@ -52,18 +49,18 @@
           %th End
           %th Description
       %tbody
-        -@last_reservations.each do |res|
-          %tr
-            %td= link_to res.summary, "#reservationModal" + res.id.to_s, data: {toggle: "modal"} 
+        - @reservations_running.each do |res|
+          %tr{class: (res.type==:remote)? "success" : ""}
+            %td= link_to res.summary, "#reservationModal" + res.sid, data: {toggle: "modal"} 
             %td= link_to res.room.name, room_path(res.room)
-            %td
-              = mute(res.author, "none") { link_to res.author.login, user_path(res.author) }
+            %td= mute(res.author, "none") { link_to res.author.login, user_path(res.author) }
             %td= res.start.localtime.to_s :date_time_nosec
             %td= res.end.localtime.to_s :date_time_nosec
             %td= cutlong(res.description, 50)
             
-            
-    -@last_reservations.each do |res|
+    -@reservations_running.uniq {|res| res.id }.each do |res|
       = render partial: "reservations/modal", locals: {reservation: res, show_room: true}
-              
-          
+     
+
+  
+            

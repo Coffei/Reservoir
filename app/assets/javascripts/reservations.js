@@ -21,6 +21,27 @@ $("#manyclose").click(function() {
 
 $("#selectpast").click(selectPastEvents);
 
+$("#recurrence #untilField").datetimepicker({
+	firstDay: 1
+});
+
+$("#recurrence #freqSelect").change(function() {
+	var index = $("#recurrence #freqSelect").val();
+	if(index == "2") {
+		$("#recurrence #weeklyoptions").fadeIn(300);
+	} else {
+		$("#recurrence #weeklyoptions").fadeOut(300);
+
+	}
+	
+	if(index == "4") {
+		$("#recurrence #yearlyoptions").fadeIn(300);
+	} else {
+		$("#recurrence #yearlyoptions").fadeOut(300);
+
+	}
+});
+
 if(typeof reservationsFeeds != 'undefined') {
 	$("#calendar").fullCalendar({
 		eventSources: reservationsFeeds,
@@ -77,9 +98,29 @@ function fillReservationModal(event) {
 	$("#reservationModal #startField").html(formatDate(event.start));
 	$("#reservationModal #endField").html(formatDate(event.end));
 	$("#reservationModal #descriptionField").html(event.description);
-	$("#reservationModal #editLink").attr("href", root_path + "/rooms/" + event.room.id + "/reservations/" + event.id + "/edit");
-	$("#reservationModal #deleteLink").attr("href", root_path + "/rooms/" + event.room.id + "/reservations/" + event.id);
-	$("#reservationModal #deleteLink").attr("data-method", "delete");
+	if(event.recurrence!=null) {
+		$("#reservationModal #recField").html(event.recurrence);
+	} else {
+		$("#reservationModal #recField").html('<p class="muted" style="margin-bottom: 0px;">no recurrence</p>');
+	}
+	
+	if(event.type=="remote") {
+		
+		$("#reservationModal #editLink").attr("style", "display: none;");
+		$("#reservationModal #deleteLink").attr("style", "display: none;");
+		$("#reservationModal #editLink").attr("href", "#");
+		$("#reservationModal #deleteLink").attr("href", "#");
+		$("#reservationModal #deleteLink").attr("data-method", "");
+				
+	} else {
+		
+		$("#reservationModal #editLink").attr("style", "");
+		$("#reservationModal #deleteLink").attr("style", "");
+		$("#reservationModal #editLink").attr("href", root_path + "/rooms/" + event.room.id + "/reservations/" + event.id + "/edit");
+		$("#reservationModal #deleteLink").attr("href", root_path + "/rooms/" + event.room.id + "/reservations/" + event.id);
+		$("#reservationModal #deleteLink").attr("data-method", "delete");
+	
+	}
 	
 	//non-permanent fields
 	author = $("#reservationModal #authorField");
