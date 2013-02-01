@@ -2,7 +2,7 @@
 -@spy = true
 -content_for :script do
   :javascript
-    var reservationsFeed = "#{room_reservations_path(@room)}.js"
+    var reservationsFeeds = ["#{room_reservations_path(@room)}.js", "#{room_reservations_remote_path(@room)}.js" ]
 
 .hero-unit#basic
   %h1= @room.name
@@ -24,9 +24,21 @@
   -if user_signed_in?
     =link_to content_tag(:span, '', class: "icon-cog") + " Edit", edit_room_path(@room), class: "btn"
     =link_to content_tag(:span, '', class: "icon-remove") + " Delete", @room, method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure?"}
+  .pull-right
+    -unless @room.cal_url.empty?
+      -if @last_remote_update
+        %span.muted
+          Last remote update at 
+          = @last_remote_update.to_s :date_time_nosec
+      -else
+        %span.muted
+          Not updated yet 
+      = link_to("Update now", room_remote_calendar_update_path(@room), class: "btn btn-info")
         
 #reservations
-  %h2 Reservations
+  %h2 
+    Reservations
+    %small#loading (started)
   #calendar
     
 #newreservation

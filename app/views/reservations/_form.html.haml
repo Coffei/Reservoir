@@ -6,7 +6,73 @@
 -if !(defined? url) then url = room_reservations_path(@room) end
 
 = form_for(@reservation, url: url, html: {class: "form-horizontal"}) do |f|
-  .control-group 
+  .pull-right.span4
+    .accordion#recurrence.inputs-small
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-toggle" => "collapse", "data-parent" => "recurrence", href: "#recOptions"}
+            Recurrence options
+        .accordion-body.collapse#recOptions{class: (params[:frequency] && params[:frequency]!="0" ? "in" : "")}
+          .accordion-inner
+            repeat every 
+            = text_field_tag("interval", params[:interval], class: "input-mini")
+            %select.input-small#freqSelect{name: "frequency", value: (params[:frequency])}
+              %option{value: 0, (params[:frequency]=="0" ? "selected" : "") => ""}
+                never
+              %option{value: 1, (params[:frequency]=="1" ? "selected" : "") => ""}
+                days
+              %option{value: 2, (params[:frequency]=="2" ? "selected" : "") => ""}
+                weeks
+              %option{value: 3, (params[:frequency]=="3" ? "selected" : "") => ""}
+                months
+              %option{value: 4, (params[:frequency]=="4" ? "selected" : "") => ""}
+                years
+            
+            %br
+            .well.well-small#weeklyoptions{style: (params[:frequency]=="2" ? "" : "display:none;")}
+              %input{type: "checkbox", name: "weekday[]", value: 1, checked: (params[:weekday] && params[:weekday].include?("1"))} Mo
+              %input{type: "checkbox", name: "weekday[]", value: 2, checked: (params[:weekday] && params[:weekday].include?("2"))} Tu
+              %input{type: "checkbox", name: "weekday[]", value: 3, checked: (params[:weekday] && params[:weekday].include?("3"))} We
+              %input{type: "checkbox", name: "weekday[]", value: 4, checked: (params[:weekday] && params[:weekday].include?("4"))} Th
+              %input{type: "checkbox", name: "weekday[]", value: 5, checked: (params[:weekday] && params[:weekday].include?("5"))} Fr
+              %input{type: "checkbox", name: "weekday[]", value: 6, checked: (params[:weekday] && params[:weekday].include?("6"))} Sa
+              %input{type: "checkbox", name: "weekday[]", value: 0, checked: (params[:weekday] && params[:weekday].include?("0"))} Su
+            %br
+            .well.well-small#yearlyoptions{style: (params[:frequency]=="4" ? "" : "display:none;")}
+              %select{name: "yearmonths[]", multiple: true}
+                %option{value: 1, (params[:yearmonths] && params[:yearmonths].include?("1") ? "selected" : "") => ""} January
+                %option{value: 2, (params[:yearmonths] && params[:yearmonths].include?("2") ? "selected" : "") => ""} February
+                %option{value: 3, (params[:yearmonths] && params[:yearmonths].include?("3") ? "selected" : "") => ""} March
+                %option{value: 4, (params[:yearmonths] && params[:yearmonths].include?("4") ? "selected" : "") => ""} April
+                %option{value: 5, (params[:yearmonths] && params[:yearmonths].include?("5") ? "selected" : "") => ""} May
+                %option{value: 6, (params[:yearmonths] && params[:yearmonths].include?("6") ? "selected" : "") => ""} June
+                %option{value: 7, (params[:yearmonths] && params[:yearmonths].include?("7") ? "selected" : "") => ""} July
+                %option{value: 8, (params[:yearmonths] && params[:yearmonths].include?("8") ? "selected" : "") => ""} August
+                %option{value: 9, (params[:yearmonths] && params[:yearmonths].include?("9") ? "selected" : "") => ""} September
+                %option{value: 10, (params[:yearmonths] && params[:yearmonths].include?("10") ? "selected" : "") => ""} October
+                %option{value: 11, (params[:yearmonths] && params[:yearmonths].include?("11") ? "selected" : "") => ""} November
+                %option{value: 12, (params[:yearmonths] && params[:yearmonths].include?("12") ? "selected" : "") => ""} December
+            
+            %br
+            
+            
+            %input{type: "radio", name: "endtype", value: 0, checked: (!params[:endtype] || params[:endtype]=="0")}
+              forever
+            %br
+            
+            %input{type: "radio", name: "endtype", value: 1, checked: params[:endtype] == "1"}
+              until 
+              %input#untilField{type: "text", name: "until", value: params[:until]}
+            %br
+            
+            %input{type: "radio", name: "endtype", value: 2, checked: params[:endtype] == "2"}
+              maximum occurrences 
+              %input.input-mini{type: "text", name: "maxcount", value: params[:maxcount]}
+                  
+      
+
+
+  .control-group
     = f.label :summary, class: "control-label"
     .controls
       = f.text_field :summary, placeholder: "summary"
@@ -44,4 +110,4 @@
   .form-actions
     = f.submit params[:action]=="edit"? "Update" : "Create", class: "btn btn-primary"
     = link_to "Back", :back, class: "btn"
-      
+

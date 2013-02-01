@@ -3,7 +3,7 @@ module RoomsHelper
   
   def status(next_reservation)
     if next_reservation
-      if next_reservation.is_running || next_reservation.start.localtime - 10.minutes <= Time.now
+      if next_reservation.running? || next_reservation.start.localtime - 10.minutes <= Time.now
         content_tag(:span, 'Occupied', class: "label label-big label-important") + content_tag(:small, " #{next_reservation.summary}" + 
            " ends in #{time_diff_in_natural_language(Time.now, next_reservation.end.localtime)}")
       else

@@ -11,17 +11,34 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121128110000) do
+ActiveRecord::Schema.define(:version => 20130129135900) do
+
+  create_table "delayed_jobs", :force => true do |t|
+    t.integer  "priority",   :default => 0
+    t.integer  "attempts",   :default => 0
+    t.text     "handler"
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "reservations", :force => true do |t|
     t.integer  "room_id"
     t.integer  "author_id"
     t.text     "description"
     t.string   "summary"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.datetime "start"
     t.datetime "end"
+    t.text     "scheduleyaml"
   end
 
   add_index "reservations", ["author_id"], :name => "index_reservations_on_author_id"
@@ -34,7 +51,21 @@ ActiveRecord::Schema.define(:version => 20121128110000) do
     t.string   "equipment"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "cal_url"
   end
+
+  create_table "temp_reservations", :force => true do |t|
+    t.integer  "room_id"
+    t.datetime "start"
+    t.datetime "end"
+    t.text     "description"
+    t.string   "summary"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.text     "scheduleyaml"
+  end
+
+  add_index "temp_reservations", ["room_id"], :name => "index_temp_reservations_on_room_id"
 
   create_table "users", :force => true do |t|
     t.string   "login",                  :default => "", :null => false

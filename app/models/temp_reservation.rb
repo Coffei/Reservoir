@@ -1,42 +1,37 @@
-class Reservation < ActiveRecord::Base
-
+class TempReservation < ActiveRecord::Base
+  COLOR = "#308045"  
   include ReservationModule
   
-
+  
   belongs_to :room
-  belongs_to :author, :class_name => "User"
-  attr_accessible :description, :end, :start, :summary, :scheduleyaml, :start_string, :end_string
-  attr_accessor :start_string, :end_string, :schedule
-
-  validates :summary, :presence => true, :length => {:maximum => 150}
-  validates :start_string, presence: true
-  validates :end_string, presence: true
-  validate :start_before_end
-  def start_before_end
-    if start && self.end &&  start >= self.end
-      errors.add(:start_string, "must be before end")
-      errors.add(:end_string, "must be after start")
-    end
-  end
-
+  attr_accessible :description, :end, :start, :summary, :start_string, :end_string, :scheduleyaml
+  attr_accessor :schedule
+  
+  
   scope :between, lambda {|start,end_date| where("(\"end\" >= ? AND \"start\" <= ?) OR (scheduleyaml IS NOT NULL)", start.utc, end_date.utc) }
   scope :of, lambda {|room| where(:room_id => room.id)}
   scope :after, lambda {|start_time| where("(\"end\" >= ?) OR (scheduleyaml IS NOT NULL)", Reservation.format_date(start_time))}
   scope :before, lambda {|end_time| where("(\"start\" < ?)", Reservation.format_date(end_time))}
-
-  def self.format_date(date_time)
-    Time.at(date_time.to_i).utc.to_formatted_s(:db)
+  
+  def author
   end
-
-  def sid
-    "native" + id.to_s
+  def author=(author)
   end
-
-  def type
-    :native
+  def author_id
+  end
+  def author_id=(value)
   end
   
-  #callbacks
+  
+  def sid
+    "remote" + id.to_s
+  end
+  
+  def type
+    :remote
+  end
+  
+ #callbacks
   before_save do
     if(@schedule)
       self.scheduleyaml = @schedule.to_yaml
@@ -51,7 +46,8 @@ class Reservation < ActiveRecord::Base
     end
   end
   
-def as_json(options = {})
+  
+  def as_json(options = {})
     {
       :id => self.id,
       :title => self.summary,
@@ -61,9 +57,8 @@ def as_json(options = {})
       :recurrence => (self.recurs? ? self.schedule.to_s : nil),
       :allDay => false,
       :room => (self.room ? self.room.as_json : "" ),
-      :author => self.author.as_json,
-      :url => (self.id ? Rails.application.routes.url_helpers.room_reservation_path(self.room, self) : ""),
-      :type => "native"
+      :type => "remote",
+      :color => COLOR
     }
   end
   
@@ -73,10 +68,9 @@ def as_json(options = {})
       :description => self.description,
       :start => self.start.rfc822,
       :end => self.end.rfc822,
-      :allDay => false,
       :room_id => self.room.id,
-      :author_id => self.author.id,
-      :type => "native"
+      :type => "remote"
     }
   end
+  
 end
