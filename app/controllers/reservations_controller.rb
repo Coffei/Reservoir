@@ -16,7 +16,7 @@ class ReservationsController < ApplicationController
     @reservations = Reservation.all_occurrences(@reservations, params)
     
     respond_to do |format|
-      format.html
+      format.html { redirect_to @room }
       format.js { render :json => @reservations }
       format.json { render :json => @reservations.map { |r| r.as_public_json } }
     end
@@ -90,8 +90,8 @@ class ReservationsController < ApplicationController
       @reservation = Reservation.new(params[:reservation])
       @reservation.room = @room
       @reservation.author = current_user
-      @reservation.start = DateTime.strptime(params[:reservation][:start_string], DATETIME_FORMAT)
-      @reservation.end = DateTime.strptime(params[:reservation][:end_string], DATETIME_FORMAT)
+      @reservation.start = Time.zone.at(DateTime.strptime(params[:reservation][:start_string], DATETIME_FORMAT).to_i)
+      @reservation.end = Time.zone.at(DateTime.strptime(params[:reservation][:end_string], DATETIME_FORMAT).to_i)
       @reservation.start -= @reservation.start.localtime.utc_offset
       @reservation.end -= @reservation.end.localtime.utc_offset
       
@@ -151,6 +151,11 @@ class ReservationsController < ApplicationController
     @reservation.start_string = @reservation.start.localtime.strftime(DATETIME_FORMAT)
     @reservation.end_string = @reservation.end.localtime.strftime(DATETIME_FORMAT)
     
+    #owner
+    if(@reservation.author==current_user)
+      params[:assign_to_me] = "1"
+    end
+    
     #recurrence options
     if(@reservation.recurs?)
       rule = @reservation.schedule.rrules.first
@@ -194,8 +199,8 @@ class ReservationsController < ApplicationController
       @reservation = Reservation.find(params[:id])
       @reservation.assign_attributes(params[:reservation])
       @reservation.author = current_user if params[:assign_to_me]
-      @reservation.start = DateTime.strptime(params[:reservation][:start_string], DATETIME_FORMAT)
-      @reservation.end = DateTime.strptime(params[:reservation][:end_string], DATETIME_FORMAT)
+      @reservation.start = Time.zone.at(DateTime.strptime(params[:reservation][:start_string], DATETIME_FORMAT).to_i)
+      @reservation.end = Time.zone.at(DateTime.strptime(params[:reservation][:end_string], DATETIME_FORMAT).to_i)
       @reservation.start -= @reservation.start.localtime.utc_offset
       @reservation.end -= @reservation.end.localtime.utc_offset
       
@@ -309,12 +314,12 @@ class ReservationsController < ApplicationController
 
       if(params[:frequency]=="2" && params[:weekday])
         days = params[:weekday].map(&:to_i)
-      rule.day(*days)
+        rule.day(*days)
       end
 
       if(params[:frequency]=="4" && params[:yearmonths])
         months = params[:yearmonths].map(&:to_i)
-      rule.month_of_year(*months)
+        rule.month_of_year(*months)
       end
 
       #until, count
@@ -322,7 +327,7 @@ class ReservationsController < ApplicationController
         until_time = Time.zone.at((DateTime.strptime(params[:until], DATETIME_FORMAT) - DateTime.local_offset).to_i)
         # on error apply no until
         if(until_time.utc >= @reservation.end.utc)
-        rule.until(until_time)
+         rule.until(until_time)
         end
       end
 
@@ -330,7 +335,7 @@ class ReservationsController < ApplicationController
         count = params[:maxcount].to_i
         # on error don't apply max-count
         if(count > 0)
-        rule.count(count)
+          rule.count(count)
         end
       end
 

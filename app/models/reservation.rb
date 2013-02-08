@@ -47,7 +47,7 @@ class Reservation < ActiveRecord::Base
   
   after_initialize do
     if(self.scheduleyaml)
-      @schedule = Schedule.from_yaml self.scheduleyaml
+      @schedule = Schedule.from_yaml(self.scheduleyaml)
     end
   end
   

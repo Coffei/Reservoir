@@ -81,7 +81,7 @@ class RoomsController < ApplicationController
   
   def start_remotecal_worker
     if(params[:room_id])
-      Delayed::Job.enqueue(RemoteCalendar.new(params[:room_id]))
+      Delayed::Job.enqueue(RemoteCalendar.new(params[:room_id], false))
       flash[:info] = "Remote calendar update was scheduled and will be finished soon."
       
       params[:id] = params[:room_id]

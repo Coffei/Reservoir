@@ -104,7 +104,8 @@
     .control-group
       = f.label :assign_to_me, "Make me owner", class: "control-label"
       .controls
-        = check_box_tag(:assign_to_me)
+        %input{type: "checkbox", name: "assign_to_me", value: 1, checked: (params[:assign_to_me] && params[:assign_to_me]=="1")}
+        
   
   
   .form-actions
