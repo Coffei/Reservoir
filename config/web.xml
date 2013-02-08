@@ -10,7 +10,7 @@
 
   <context-param>
     <param-name>rails.env</param-name>
-    <param-value>development</param-value>
+    <param-value>production</param-value>
   </context-param>
 
   <context-param>

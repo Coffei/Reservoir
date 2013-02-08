@@ -25,15 +25,20 @@ Then just follow these few steps:
        2.2. Run "bundle exec rake RAILS_ENV=production db:migrate" to create tables with appropriate schema.
        
        2.3. Fill your DB with initial data by running "bundle exec rake RAILS_ENV=production db:seed".
-       		If you have .sql file that you want to import, you can do it by placing the file to root of
-       		Reservoir before running the command above.
+       	If you have .sql file that you want to import, you can do it by placing the file to root of
+       	Reservoir before running the command above.
        
        2.4. Run "bundle exec rake RAILS_ENV=production assets:precompile" to compile assets
             Note: This command might take a while (you can run it with --trace to see the progress)
             Note2: if you experience problems with assets loading twice (if calendar is rendered twice), 
             	   you may want to rename app/assets (to st. like app/assets.old)
        
-       2.5. Package Reservoir to war by command "warble war".
+       2.5. For the reset-password-mailer to work, you need to fill out the host, where the application will be running.
+       Please do that in config/evnironments/production.rb. At the end of the file edit 'config.action_mailer.default_url_options'
+       property.
+       
+       2.6. Package Reservoir to war by command "warble war".
+       
 
 3. Deploy:
        You can now deploy the generated war file to your JavaEE container.         
