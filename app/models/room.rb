@@ -33,8 +33,8 @@ class Room < ActiveRecord::Base
 
   def convert_single_temp_reservation(event)
     res = TempReservation.new(summary: event.summary,
-    description: event.description, start: event.start_time.to_datetime,
-    end: event.finish_time.to_datetime)
+    description: event.description, start: Time.zone.at(event.start_time.to_i),
+    end: Time.zone.at(event.finish_time.to_i))
     res.room = self
 
     #build schedule

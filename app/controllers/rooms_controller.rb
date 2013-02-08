@@ -63,10 +63,11 @@ class RoomsController < ApplicationController
     @last_remote_update = (rnd_temp)? rnd_temp.updated_at.localtime : nil
  
     now = Time.zone.now
-    reservations = Reservation.all_occurrences(Reservation.of(@room).between(now, now + 14.days), after: now, until: now + 14.days)
-    reservations.concat(TempReservation.all_occurrences(TempReservation.of(@room).between(now, now + 14.days), after: now, until: now + 14.days))
-    
+    reservations = Reservation.of(@room).between(now, now + 14.days).map(&:next_occurrence)
+    reservations.concat(TempReservation.of(@room).between(now, now + 14.days).map(&:next_occurrence))
+    reservations.delete_if { |el| el==nil } 
     @next_reservation = reservations.min_by(&:start)
+    
     @reservation = Reservation.new
     @reservation.start_string = Time.zone.now.localtime.to_s :date_time_nosec
     @reservation.end_string = (Time.zone.now.localtime + 30.minutes).to_s :date_time_nosec

@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
     layout Proc.new { |controller| controller.devise_controller? ? 'empty' : 'application' }
     
     def after_sign_in_path_for(resource)
-      if(request.referrer.include?(new_user_session_path))
+      if(request.referrer.include?("/users/"))
         root_path
       else
         request.referrer

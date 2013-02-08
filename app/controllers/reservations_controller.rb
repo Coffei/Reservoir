@@ -29,9 +29,12 @@ class ReservationsController < ApplicationController
     @reservations = @reservations.after(params[:start]) if params[:start]
     @reservations = @reservations.before(params[:end]) if params[:end]
     
+   
     if(params[:start]) then params[:after] = Time.zone.at(params[:start].to_i) end
     if(params[:end]) then params[:until] = Time.zone.at(params[:end].to_i) end
     @reservations = TempReservation.all_occurrences(@reservations, params)
+    
+    
     respond_to do |format|
       format.js { render :json => @reservations }
     end
@@ -87,8 +90,10 @@ class ReservationsController < ApplicationController
       @reservation = Reservation.new(params[:reservation])
       @reservation.room = @room
       @reservation.author = current_user
-      @reservation.start = DateTime.strptime(params[:reservation][:start_string], DATETIME_FORMAT) - DateTime.local_offset
-      @reservation.end = DateTime.strptime(params[:reservation][:end_string], DATETIME_FORMAT) - DateTime.local_offset
+      @reservation.start = DateTime.strptime(params[:reservation][:start_string], DATETIME_FORMAT)
+      @reservation.end = DateTime.strptime(params[:reservation][:end_string], DATETIME_FORMAT)
+      @reservation.start -= @reservation.start.localtime.utc_offset
+      @reservation.end -= @reservation.end.localtime.utc_offset
       
       
       @reservation.schedule = build_schedule(@reservation.start, @reservation.end, params)
@@ -189,8 +194,11 @@ class ReservationsController < ApplicationController
       @reservation = Reservation.find(params[:id])
       @reservation.assign_attributes(params[:reservation])
       @reservation.author = current_user if params[:assign_to_me]
-      @reservation.start = DateTime.strptime(params[:reservation][:start_string], DATETIME_FORMAT) - DateTime.local_offset
-      @reservation.end = DateTime.strptime(params[:reservation][:end_string], DATETIME_FORMAT) - DateTime.local_offset
+      @reservation.start = DateTime.strptime(params[:reservation][:start_string], DATETIME_FORMAT)
+      @reservation.end = DateTime.strptime(params[:reservation][:end_string], DATETIME_FORMAT)
+      @reservation.start -= @reservation.start.localtime.utc_offset
+      @reservation.end -= @reservation.end.localtime.utc_offset
+      
       
       #recurrence
       @reservation.schedule = build_schedule(@reservation.start, @reservation.end, params)
