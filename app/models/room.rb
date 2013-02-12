@@ -20,7 +20,11 @@ class Room < ActiveRecord::Base
       http.use_ssl=true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       http.request_get(uri.path) do |res|
-        cal = RiCal.parse_string(res.body)
+        body = res.body
+        #workaround for RiCal bug #41
+        body.gsub!(/;";/, ';')
+        
+        cal = RiCal.parse_string(body)
         store_cal(cal)
       end
 
@@ -71,7 +75,7 @@ class Room < ActiveRecord::Base
 
         #recurrence limitation
         rule.until(rrule.until.to_datetime) if rrule.until
-        rule.count(rrule.count.to_datetime) if rrule.count
+        rule.count(rrule.count.to_i) if rrule.count
           
           
         #add rrule
