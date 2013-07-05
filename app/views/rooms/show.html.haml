@@ -3,6 +3,31 @@
 -content_for :script do
   :javascript
     var reservationsFeeds = ["#{room_reservations_path(@room)}.js", "#{room_reservations_remote_path(@room)}.js" ]
+    
+-if(@update_jobs.size) > 0
+  -content_for :side_panel do
+    .well.well-small.affix{style: "margin-top: 200px; width: 130px"}
+      %ul.nav.nav-list
+        %li.nav-header Planned jobs
+        %li
+          %table.table.table-condesed.table-bordered
+            %tr
+              %th{style: "text-align: center"}
+                =glyph("refresh")
+              %th{style: "text-align: center"}
+                =glyph("warning-sign")
+              %tr
+                %td{style: "text-align: center"}
+                  %p.text-info
+                    = @update_jobs.size
+                %td{style: "text-align: center"}
+                  %p.text-error
+                    = @failed_jobs.size
+         
+          
+          .progress.progress-striped
+            .bar.bar-info.active{style: "width: #{ 100 - @failed_ratio }%"}
+            .bar.bar-danger{style: "width: #{ @failed_ratio }%"}
 
 .hero-unit#basic
   %h1= @room.name

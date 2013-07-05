@@ -68,10 +68,21 @@ class RoomsController < ApplicationController
     reservations.delete_if { |el| el==nil } 
     @next_reservation = reservations.min_by(&:start)
     
+    #new reservation for form
     @reservation = Reservation.new
     @reservation.start_string = Time.zone.now.localtime.to_s :date_time_nosec
     @reservation.end_string = (Time.zone.now.localtime + 30.minutes).to_s :date_time_nosec
     
+     #pending jobs
+    jobs = ActiveRecord::Base.connection.execute("SELECT * FROM delayed_jobs ORDER BY run_at")
+    transform_jobs(jobs, @room.id)
+   
+   
+    @update_jobs = jobs.select {|job| job["handler"].is_a? RemoteCalendar }
+    @failed_jobs = jobs.select {|job| job["last_error"] != nil}
+    
+    @failed_ratio = 0
+    @failed_ratio = @failed_jobs.size * 100 / (@update_jobs.size) if (@update_jobs.size) > 0
   
     respond_to do |format|
       format.html
@@ -95,5 +106,15 @@ class RoomsController < ApplicationController
       redirect_to action: "index"
     end
 
+  end
+  
+  private
+  def transform_jobs(jobs, room_id=nil)
+    jobs.each {|job| job["handler"] = YAML.load(job["handler"])}
+   
+   if(room_id)
+      #filter jobs by room_id
+      jobs.keep_if { |job| job["handler"].room_id == room_id.to_s}
+    end
   end
 end

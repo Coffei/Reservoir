@@ -85,7 +85,8 @@
                 -@sidelinks.each_pair do |name, link|
                   -next if name == :header
                   %li{class: active_class(link)}=link_to name, link
-                
+          -if content_for(:side_panel)
+            = yield(:side_panel)                
                 
                
            
