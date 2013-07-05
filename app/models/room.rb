@@ -12,6 +12,7 @@ class Room < ActiveRecord::Base
 
   def fetch_remote_calendar
     #download
+    puts "Downloading files"
     unless(cal_url.empty?)
       require "net/http"
 
@@ -122,22 +123,25 @@ class Room < ActiveRecord::Base
   end
 
   def store_cal(cal)
-    #delete old
-    puts "Deleting old temps"
+    
+    #convert to entities (model)
+    puts "Converting to entities"
+    entities = cal.first.events.map {|event| convert_single_temp_reservation(event)}
+    
     ActiveRecord::Base.transaction do
+      #delete old
+      puts "Deleting old temps"
       TempReservation.of(self).delete_all
 
       #store current
       puts "Storing new temps #{cal.first.events.count}"
+      entities.each {|entity| entity.save }
 
-      cal.first.events.each do |event|
-        convert_single_temp_reservation(event).save
-
-        ActiveRecord::Base.connection.execute("UPDATE temp_reservations SET description = '' WHERE description IS NULL")
-        ActiveRecord::Base.connection.execute("UPDATE temp_reservations SET summary = '' WHERE summary IS NULL")
-      end
+      ActiveRecord::Base.connection.execute("UPDATE temp_reservations SET description = '' WHERE description IS NULL")
+      ActiveRecord::Base.connection.execute("UPDATE temp_reservations SET summary = '' WHERE summary IS NULL")
     end
   end
+
 
   def clean_cal
     puts "Deleting all temps"
